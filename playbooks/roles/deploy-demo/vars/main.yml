@@ -19,3 +19,13 @@ snow_password: Password1
 # Details for accessing Red Hat registry (to pull DE)
 registry_username: rh-access
 registry_token: abc123
+
+# Details for the created organizations
+org_platform:
+  name: devplatform
+  description: Developer Platform
+  repo: "https://github.com/derekwaters/ansible_devops_demo"
+org_app:
+  name: appowner
+  description: Application Owner Team
+  repo: "https://github.com/derekwaters/ansible_devops_demo_appteam"

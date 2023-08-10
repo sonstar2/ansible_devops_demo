@@ -1,17 +1,26 @@
 ---
-- name: Create midrange Organization
+- name: Create Platform Organization
   ansible.controller.organization:
-    name: "midrange"
-    description: "Midrange"
+    name: "{{ org_platform.name }}"
+    description: "{{ org_platform.description }}"
     state: present
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
+- name: Create App Organization
+  ansible.controller.organization:
+    name: "{{ org_app.name }}"
+    description: "{{ org_app.description }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+
 - name: Add a sample inventory
   ansible.controller.inventory:
-    name: "midrange-assets"
-    description: "Midrange Asset List"
-    organization: "midrange"
+    name: "{{ org_platform.name }}-assets"
+    description: "{{ org_platform.description }} Asset List"
+    organization: "{{ org_platform.name }}"
     state: present
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
@@ -20,7 +29,7 @@
   ansible.controller.host:
     name: "{{ managed_host }}"
     description: "Local Host for Inventory"
-    inventory: "midrange-assets"
+    inventory: "{{ org_platform.name }}-assets"
     state: present
     enabled: true
     variables:
@@ -30,9 +39,9 @@
     tower_password: "{{ aap_password }}"
 - name: Add a sample credential
   ansible.controller.credential:
-    name: "midrange-network-access"
-    description: "Midrange Network Access Credential"
-    organization: "midrange"
+    name: "{{ org_platform.name }}-network-access"
+    description: "{{ org_platform.description }} Network Access Credential"
+    organization: "{{ org_platform.name }}"
     credential_type: Machine
     inputs:
       username: "{{ network_cred_username }}"
@@ -41,16 +50,16 @@
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
-- name: Add a sample project
+- name: Add platform project
   ansible.controller.project:
-    name: "itsm-demo"
-    description: "ITSM Sample Project"
-    organization: "midrange"
+    name: "{{ org_platform.name }}-demo"
+    description: "{{ org_platform.description }} Project"
+    organization: "{{ org_platform.name }}"
     scm_branch: main
     scm_clean: true
     scm_type: git
     scm_update_on_launch: true
-    scm_url: "https://github.com/derekwaters/ansible_eda_demo"
+    scm_url: "{{ org_platform.repo }}"
     update_project: true
     wait: true
     state: present
@@ -58,65 +67,120 @@
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
 
-- name: Create a set of job templates
+- name: Add app team project
+  ansible.controller.project:
+    name: "{{ org_app.name }}-demo"
+    description: "{{ org_app.description }} Project"
+    organization: "{{ org_app.name }}"
+    scm_branch: main
+    scm_clean: true
+    scm_type: git
+    scm_update_on_launch: true
+    scm_url: "{{ org_app.repo }}"
+    update_project: true
+    wait: true
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+
+
+- name: Create a set of job templates for the platform team
   ansible.controller.job_template:
     name: "{{ item.name }}"
     job_type: "run"
-    organization: "midrange"
-    inventory: "midrange-assets"
-    project: "itsm-demo"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
     playbook: "{{ item.playbook }}"
     credentials:
-      - "midrange-network-access"
+      - "{{ org_platform.name }}-network-access"
     state: present
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
   loop:
     - { name: "1-create-cr", playbook: "playbooks/snow_create_cr.yml" }
-    - { name: "2-prepatch-check", playbook: "playbooks/prepatch_check.yml" }
-    - { name: "4-apply-patch", playbook: "playbooks/apply_patch.yml" }
-    - { name: "5-postpatch-check", playbook: "playbooks/postpatch_check.yml" }
-    - { name: "6-rollback-patch", playbook: "playbooks/rollback_patch.yml" }
+    - { name: "I1-incident", playbook: "playbooks/snow_create_incident.yml" }
+    - { name: "3-provision", playbook: "playbooks/provision_infrastructure.yml" }
 
-- name: Create a set of job templates for CR status update
+- name: Create a set of job templates for the app team
   ansible.controller.job_template:
     name: "{{ item.name }}"
     job_type: "run"
-    organization: "midrange"
-    inventory: "midrange-assets"
-    project: "itsm-demo"
-    playbook: "playbooks/snow_set_cr_status.yml"
-    extra_vars:
-      new_state: "{{ item.new_state }}"
-      assignment_group: "Software"
+    organization: "{{ org_app.name }}"
+    inventory: "{{ org_app.name }}-assets"
+    project: "{{ org_app.name }}-demo"
+    playbook: "{{ item.playbook }}"
     credentials:
-      - "midrange-network-access"
+      - "{{ org_app.name }}-network-access"
     state: present
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
   loop:
-    - { name: "3.0-update-cr-status-scheduled", new_state: "scheduled" }
-    - { name: "3.1-update-cr-status-started", new_state: "implement" }
-    - { name: "3.2-update-cr-status-failed", new_state: "canceled" }
-    - { name: "3.3-update-cr-status-review", new_state: "review" }
+    - { name: "2-prerollout", playbook: "playbooks/prerollout_check.yml" }
+    - { name: "4-postprovision", playbook: "playbooks/postprovision_configuration.yml" }
+    - { name: "5-tvt", playbook: "playbooks/postrollout_tvt.yml" }
+
+- name: Create a set of job templates for CR status update
+  ansible.controller.job_template:
+    name: "{{ item.name }}"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    playbook: "playbooks/snow_set_cr_status.yml"
+    extra_vars:
+      new_state: "{{ item.new_state }}"
+      assignment_group: "Software"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+  loop:
+    - { name: "S.0-update-cr-status-scheduled", new_state: "scheduled" }
+    - { name: "S.1-update-cr-status-started", new_state: "implement" }
+    - { name: "S.2-update-cr-status-failed", new_state: "canceled" }
+    - { name: "S.3-update-cr-status-review", new_state: "review" }
 
 - name: Create a job template for CR closure
   ansible.controller.job_template:
-    name: "3.4-update-cr-status-complete"
+    name: "S.4-update-cr-status-complete"
     job_type: "run"
-    organization: "midrange"
-    inventory: "midrange-assets"
-    project: "itsm-demo"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
     playbook: "playbooks/snow_set_cr_closed.yml"
     extra_vars:
       new_state: "closed"
       assignment_group: "Software"
       close_code: successful
-      close_notes: "Patching performed successfully"
+      close_notes: "Deployment performed successfully"
     credentials:
-      - "midrange-network-access"
+      - "{{ org_platform.name }}-network-access"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+
+- name: Create a job template for incident
+  ansible.controller.job_template:
+    name: "I1-incident"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    playbook: "playbooks/snow_create_incident.yml"
+    extra_vars:
+      new_state: "closed"
+      assignment_group: "Software"
+      close_code: successful
+      close_notes: "Deployment performed successfully"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
     state: present
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
@@ -124,18 +188,18 @@
 
 - name: Create a job template to launch a workflow template (ugh)
   ansible.controller.job_template:
-    name: "patch-workflow"
+    name: "rollout-app"
     job_type: "run"
-    organization: "midrange"
-    inventory: "midrange-assets"
-    project: "itsm-demo"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
     playbook: "playbooks/launch_workflow.yml"
     extra_vars:
       aap_hostname: "{{ aap_host }}"
       aap_username: "{{ aap_username }}"
       aap_password: "{{ aap_password }}"
     credentials:
-      - "midrange-network-access"
+      - "{{ org_platform.name }}-network-access"
     state: present
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
@@ -143,152 +207,165 @@
 
 - name: Create a workflow template
   ansible.controller.workflow_job_template:
-    name: "patch-workflow-impl"
-    description: "Sample Patching Workflow with ServiceNow integration"
-    organization: "midrange"
-    inventory: "midrange-assets"
+    name: "rollout-app-impl"
+    description: "Sample App Deployment Workflow with ServiceNow integration and Multiple Teams"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
     extra_vars:
       snow_hostname: "{{ snow_hostname }}"
       snow_username: "{{ snow_username }}"
       snow_password: "{{ snow_password }}"
       snow_cr_user: "{{ snow_username }}"
     workflow_nodes:
-      - identifier: 01-create
+      - identifier: 1-create
         unified_job_template:
           name: "1-create-cr"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes:
-            - identifier: "02-prepatch"
+            - identifier: "2-prerollout"
           credentials: []
 
-      - identifier: 02-prepatch
+      - identifier: 2-prerollout
         unified_job_template:
-          name: "2-prepatch-check"
+          name: "2-prerollout"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_app.name }}"
         related:
           success_nodes:
-            - identifier: "04-apply"
-            - identifier: "030-scheduled"
+            - identifier: "3-provision"
+            - identifier: "S0-scheduled"
           failure_nodes:
-            - identifier: "032-failed"
+            - identifier: "S2-failed"
           always_nodes: []
           credentials: []
 
-      - identifier: 030-scheduled
+      - identifier: S0-scheduled
         unified_job_template:
-          name: "3.0-update-cr-status-scheduled"
+          name: "S.0-update-cr-status-scheduled"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes:
-            - identifier: "031-started"
+            - identifier: "S1-started"
           credentials: []
 
-      - identifier: 031-started
+      - identifier: S1-started
         unified_job_template:
-          name: "3.1-update-cr-status-started"
+          name: "S.1-update-cr-status-started"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes: []
           credentials: []
 
-      - identifier: 032-failed
+      - identifier: S2-failed
         unified_job_template:
           name: "3.2-update-cr-status-failed"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes: []
           credentials: []
 
-      - identifier: 04-apply
+      - identifier: 3-provision
         unified_job_template:
-          name: "4-apply-patch"
+          name: "3-provision"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes:
-            - identifier: "05-postpatch"
+            - identifier: "4-postprovision"
           credentials: []
 
-      - identifier: 05-postpatch
+      - identifier: 4-postprovision
         unified_job_template:
-          name: "5-postpatch-check"
+          name: "4-postprovision"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_app.name }}"
+        related:
+          success_nodes: []
+          failure_nodes: []
+          always_nodes:
+            - identifier: "5-tvt"
+          credentials: []
+
+      - identifier: 5-tvt
+        unified_job_template:
+          name: "5-tvt"
+          type: job_template
+          organization:
+            name: "{{ org_app.name }}"
         related:
           success_nodes:
-            - identifier: "033-review"
+            - identifier: "S3-review"
           failure_nodes:
-            - identifier: "06-rollback"
+            - identifier: "I1-incident"
           always_nodes: []
           credentials: []
 
-      - identifier: 033-review
+      - identifier: S3-review
         unified_job_template:
-          name: "3.3-update-cr-status-review"
+          name: "S.3-update-cr-status-review"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes:
-            - identifier: "034-complete"
+            - identifier: "S4-complete"
           credentials: []
 
-      - identifier: 034-complete
+      - identifier: S4-complete
         unified_job_template:
-          name: "3.4-update-cr-status-complete"
+          name: "S.4-update-cr-status-complete"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes: []
           credentials: []
 
-      - identifier: 06-rollback
+      - identifier: I1-incident
         unified_job_template:
-          name: "6-rollback-patch"
+          name: "I1-incident"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
           always_nodes:
-            - identifier: "035-failed"
+            - identifier: "S5-failed"
           credentials: []
 
-      - identifier: 035-failed
+      - identifier: S5-failed
         unified_job_template:
-          name: "3.2-update-cr-status-failed"
+          name: "S.2-update-cr-status-failed"
           type: job_template
           organization:
-            name: "midrange"
+            name: "{{ org_platform.name }}"
         related:
           success_nodes: []
           failure_nodes: []
@@ -303,7 +380,7 @@
   ansible.controller.application:
     name: "eda"
     description: "Event-Driven Ansible Connector"
-    organization: "midrange"
+    organization: "{{ org_platform.name }}"
     state: present
     authorization_grant_type: authorization-code
     redirect_uris:
