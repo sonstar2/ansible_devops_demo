@@ -1,0 +1,25 @@
+---
+- name: Create SNow Change Request
+  hosts: all
+
+  tasks:
+    - name: Create change request
+      servicenow.itsm.change_request:
+        instance:
+          host: "{{ snow_hostname }}"
+          username: "{{ snow_username }}"
+          password: "{{ snow_password }}"
+
+        type: standard
+        state: new
+        requested_by: "{{ snow_cr_user }}"
+        short_description: Patch Servers
+        description: "Patch Out-of-date Server"
+        priority: moderate
+        risk: low
+        impact: low
+      register: result_cr
+    - name: Set CR fact
+      ansible.builtin.set_stats:
+        data:
+          new_cr: "{{ result_cr.diff.after }}"
