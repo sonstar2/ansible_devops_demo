@@ -1,0 +1,23 @@
+---
+- name: Create SNow Incident
+  hosts: all
+
+  tasks:
+    - name: Create incident
+      servicenow.itsm.incident:
+        instance:
+          host: "{{ snow_hostname }}"
+          username: "{{ snow_username }}"
+          password: "{{ snow_password }}"
+
+        state: new
+        caller: "{{ snow_cr_user }}"
+        short_description: "Precheck on app rollout failed"
+        description: "Precheck failed"
+        impact: low
+        urgency: low
+      register: result_incident
+    - name: Set Incident fact
+      ansible.builtin.set_stats:
+        data:
+          new_incident: "{{ result_incident.diff.after }}"

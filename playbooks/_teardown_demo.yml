@@ -1,8 +1,8 @@
 ---
-- name: Destroy EDA Demo Contents
+- name: Destroy Demo Contents
   hosts: all
 
   tasks:
     - name: Teardown deployment
       ansible.builtin.include_role:
-        name: "teardown-eda-demo"
+        name: "teardown-demo"

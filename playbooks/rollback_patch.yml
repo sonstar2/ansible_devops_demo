@@ -1,8 +1,0 @@
----
-- name: Rollback Patch
-  hosts: all
-
-  tasks:
-    - name: Simulate rollback
-      ansible.builtin.pause:
-        seconds: 1

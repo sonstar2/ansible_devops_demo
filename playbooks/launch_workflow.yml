@@ -1,5 +1,5 @@
 ---
-- name: Launch the patching workflow
+- name: Launch the demo workflow
   hosts: localhost
 # NOTE: This is needed because EDA currently does not support
 # launching a workflow job template as an action (only job
@@ -9,9 +9,9 @@
     - name: Show me all the things
       ansible.builtin.debug:
         var: ansible_facts
-    - name: Launch patching implementation workflow
+    - name: Launch demo implementation workflow
       ansible.controller.workflow_launch:
-        workflow_template: "patch-workflow-impl"
+        workflow_template: "rollout-app-impl"
         wait: false
         controller_host: "{{ aap_hostname }}"
         controller_username: "{{ aap_username }}"

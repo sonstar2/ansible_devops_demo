@@ -1,0 +1,12 @@
+---
+- name: Pre-rollout Status Check
+  hosts: all
+
+  tasks:
+    - name: Simulate pre-rollout checks
+      ansible.builtin.pause:
+        seconds: 1
+    - name: Pre-rollout check fails
+      ansible.builtin.fail:
+        msg: "Pre-rollout checking failed!"
+      when: rollout_status is defined and rollout_status == "fail_precheck"

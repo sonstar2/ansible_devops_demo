@@ -1,8 +1,0 @@
----
-- name: Patch Server
-  hosts: all
-
-  tasks:
-    - name: Simulate patching
-      ansible.builtin.pause:
-        seconds: 1

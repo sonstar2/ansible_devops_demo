@@ -1,8 +1,8 @@
 ---
-- name: Deploy EDA Demo Contents
+- name: Deploy Demo Contents
   hosts: all
 
   tasks:
     - name: Run deployment
       ansible.builtin.include_role:
-        name: "deploy-eda-demo"
+        name: "deploy-demo"

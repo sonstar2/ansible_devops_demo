@@ -1,8 +1,0 @@
----
-- name: Debug an event
-  hosts: localhost
-
-  tasks:
-    - name: Debug all vars
-      ansible.builtin.debug:
-        var: event
