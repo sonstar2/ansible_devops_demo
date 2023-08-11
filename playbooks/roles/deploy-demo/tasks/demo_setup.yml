@@ -109,11 +109,11 @@
     name: "{{ item.name }}"
     job_type: "run"
     organization: "{{ org_app.name }}"
-    inventory: "{{ org_app.name }}-assets"
+    inventory: "{{ org_platform.name }}-assets"
     project: "{{ org_app.name }}-demo"
     playbook: "{{ item.playbook }}"
     credentials:
-      - "{{ org_app.name }}-network-access"
+      - "{{ org_platform.name }}-network-access"
     state: present
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
@@ -154,26 +154,6 @@
     inventory: "{{ org_platform.name }}-assets"
     project: "{{ org_platform.name }}-demo"
     playbook: "playbooks/snow_set_cr_closed.yml"
-    extra_vars:
-      new_state: "closed"
-      assignment_group: "Software"
-      close_code: successful
-      close_notes: "Deployment performed successfully"
-    credentials:
-      - "{{ org_platform.name }}-network-access"
-    state: present
-    tower_host: "{{ aap_host }}"
-    tower_username: "{{ aap_username }}"
-    tower_password: "{{ aap_password }}"
-
-- name: Create a job template for incident
-  ansible.controller.job_template:
-    name: "I1-incident"
-    job_type: "run"
-    organization: "{{ org_platform.name }}"
-    inventory: "{{ org_platform.name }}-assets"
-    project: "{{ org_platform.name }}-demo"
-    playbook: "playbooks/snow_create_incident.yml"
     extra_vars:
       new_state: "closed"
       assignment_group: "Software"
@@ -272,7 +252,7 @@
 
       - identifier: S2-failed
         unified_job_template:
-          name: "3.2-update-cr-status-failed"
+          name: "S.2-update-cr-status-failed"
           type: job_template
           organization:
             name: "{{ org_platform.name }}"
