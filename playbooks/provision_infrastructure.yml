@@ -3,7 +3,7 @@
   hosts: all
 
   tasks:
-    #- name: Basic terraform deployment
+    # - name: Basic terraform deployment
     #  cloud.terraform.terraform:
     #    project_path: '{{ project_dir }}'
     #    state: present
