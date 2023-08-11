@@ -3,14 +3,14 @@
   hosts: all
 
   tasks:
-    - name: Basic terraform deployment
-      cloud.terraform.terraform:
-        project_path: '{{ project_dir }}'
-        state: present
-        backend_config:
-          region: "ap-southeast-4"
-          bucket: "some-bucket"
-          key: "random.tfstate"
+    #- name: Basic terraform deployment
+    #  cloud.terraform.terraform:
+    #    project_path: '{{ project_dir }}'
+    #    state: present
+    #    backend_config:
+    #      region: "ap-southeast-4"
+    #      bucket: "some-bucket"
+    #      key: "random.tfstate"
 
     - name: Simulate terraform deployment
       ansible.builtin.pause:
