@@ -13,8 +13,8 @@
         type: standard
         state: new
         requested_by: "{{ snow_cr_user }}"
-        short_description: Patch Servers
-        description: "Patch Out-of-date Server"
+        short_description: "{{ snow_cr_title }}"
+        description: "{{ snow_cr_description }}"
         priority: moderate
         risk: low
         impact: low

@@ -12,8 +12,8 @@
 
         state: new
         caller: "{{ snow_cr_user }}"
-        short_description: "Checks on app rollout failed"
-        description: "Checks failed"
+        short_description: "{{ snow_incident_title }}"
+        description: "{{ snow_incident_description }}"
         impact: low
         urgency: low
       register: result_incident

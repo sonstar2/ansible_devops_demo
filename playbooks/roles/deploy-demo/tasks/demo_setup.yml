@@ -196,6 +196,10 @@
       snow_username: "{{ snow_username }}"
       snow_password: "{{ snow_password }}"
       snow_cr_user: "{{ snow_username }}"
+      snow_cr_title: "Deploy VM Application"
+      snow_cr_description: "Provision infrastructure and deploy the VM-based application with TVT"
+      snow_incident_title: "Failed Application Deployment"
+      snow_incident_description: "Application Deployment failed due to error 12345"
     workflow_nodes:
       - identifier: 1-create
         unified_job_template:
