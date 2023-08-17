@@ -64,6 +64,20 @@
                 sourceNamespace: openshift-marketplace
             state: present
 
+        - name: Wait for the operator to be available
+          redhat.openshift.k8s:
+            api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+            host: "{{ ocp_host }}"
+            validate_certs: false
+            api_version: operators.coreos.com/v1alpha1
+            kind: Subscription
+            name: ansible-automation-platform-operator
+            namespace: aap
+          register: operatordetails
+          until: operatordetails.some_status == "OK"
+          retries: 10
+          delay: 30
+
         - name: Install AAP Controller
           redhat.openshift.k8s:
             api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
@@ -79,7 +93,7 @@
                 replicas: 1
             state: present
 
-        - name: Get AAP URL
+        - name: Get AAP URL (when AAP Controller is available)
           redhat.openshift.k8s:
             api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
             host: "{{ ocp_host }}"
@@ -89,10 +103,25 @@
             namespace: aap
             name: demo-aap
           register: aap_route
+          until: aap_route.result != null
+          retries: 10
+          delay: 30
 
         - name: Debug route
           ansible.builtin.debug:
             var: aap_route
+
+        - name: Get AAP admin password
+          redhat.openshift.k8s:
+            api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+            host: "{{ ocp_host }}"
+            validate_certs: false
+            api_version: v1
+            kind: Secret
+            namespace: aap
+            name: demo-aap-admin-password
+          register: aap_admin_pwd
+
 
         - name: Install EDA Controller
           redhat.openshift.k8s:
@@ -110,18 +139,7 @@
                 automation_server_url: "{{ aap_route.result.spec.port.targetPort }}://{{ aap_route.result.spec.host }}"
             state: present
 
-        - name: Get AAP admin password
-          redhat.openshift.k8s:
-            api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
-            host: "{{ ocp_host }}"
-            validate_certs: false
-            api_version: v1
-            kind: Secret
-            namespace: aap
-            name: demo-aap-admin-password
-          register: aap_admin_pwd
-
-        - name: Get EDA admin password
+        - name: Get EDA admin password (when EDA is available)
           redhat.openshift.k8s:
             api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
             host: "{{ ocp_host }}"
@@ -131,6 +149,9 @@
             namespace: aap
             name: demo-eda-admin-password
           register: eda_admin_pwd
+          until: eda_admin_pwd.result != null
+          retries: 10
+          delay: 30
 
         - name: Debug the AAP password
           ansible.builtin.debug:
