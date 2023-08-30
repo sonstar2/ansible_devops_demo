@@ -65,18 +65,22 @@
             state: present
 
         - name: Wait for the operator to be available
-          redhat.openshift.k8s:
+          kubernetes.core.k8s_info:
             api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
             host: "{{ ocp_host }}"
             validate_certs: false
-            api_version: operators.coreos.com/v1alpha1
             kind: Subscription
-            name: ansible-automation-platform-operator
             namespace: aap
+            name: 'ansible-automation-platform'
+            api_version: 'operators.coreos.com/v1alpha1'
           register: operatordetails
-          until: operatordetails.some_status == "OK"
+          until: "operatordetails.resources | length > 0"
           retries: 10
           delay: 30
+
+        - name: Debug the operator details
+          ansible.builtin.debug:
+            var: operatordetails
 
         - name: Install AAP Controller
           redhat.openshift.k8s:
@@ -94,7 +98,7 @@
             state: present
 
         - name: Get AAP URL (when AAP Controller is available)
-          redhat.openshift.k8s:
+          kubernetes.core.k8s_info:
             api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
             host: "{{ ocp_host }}"
             validate_certs: false
@@ -103,16 +107,16 @@
             namespace: aap
             name: demo-aap
           register: aap_route
-          until: aap_route.result != null
+          until: "aap_route.resources | length > 0"
           retries: 10
           delay: 30
 
         - name: Debug route
           ansible.builtin.debug:
-            var: aap_route
+            var: aap_route.resources
 
         - name: Get AAP admin password
-          redhat.openshift.k8s:
+          kubernetes.core.k8s_info:
             api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
             host: "{{ ocp_host }}"
             validate_certs: false
@@ -136,11 +140,11 @@
                 namespace: aap
               spec:
                 replicas: 1
-                automation_server_url: "{{ aap_route.result.spec.port.targetPort }}://{{ aap_route.result.spec.host }}"
+                automation_server_url: "{{ aap_route.resources[0].spec.port.targetPort }}://{{ aap_route.resources[0].spec.host }}"
             state: present
 
         - name: Get EDA admin password (when EDA is available)
-          redhat.openshift.k8s:
+          kubernetes.core.k8s_info:
             api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
             host: "{{ ocp_host }}"
             validate_certs: false
@@ -149,17 +153,17 @@
             namespace: aap
             name: demo-eda-admin-password
           register: eda_admin_pwd
-          until: eda_admin_pwd.result != null
+          until: "eda_admin_pwd.resources | length > 0"
           retries: 10
           delay: 30
 
         - name: Debug the AAP password
           ansible.builtin.debug:
-            msg: "{{ aap_admin_pwd.result.data.password | b64decode }}"
+            msg: "{{ aap_admin_pwd.resources[0].data.password | b64decode }}"
 
         - name: Debug the EDA password
           ansible.builtin.debug:
-            msg: "{{ eda_admin_pwd.result.data.password | b64decode }}"
+            msg: "{{ eda_admin_pwd.resources[0].data.password | b64decode }}"
 
       always:
         - name: If login succeeds, revoke the API key
