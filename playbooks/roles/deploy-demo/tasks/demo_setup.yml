@@ -7,6 +7,7 @@
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
+
 - name: Create App Organization
   ansible.controller.organization:
     name: "{{ org_app.name }}"
@@ -359,6 +360,114 @@
     tower_host: "{{ aap_host }}"
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
+
+
+# RBACS
+- name: Add a dev team
+  ansible.controller.team:
+    name: "dev-team"
+    description: "Application Development Team"
+    organization: "{{ org_app.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+
+- name: Give the dev team rights on the app organisation
+  ansible.controller.role:
+    team: "dev-team"
+    role: "{{ item }}"
+    organization: "{{ org_app.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+  with_items:
+    - read
+    - execute
+    - job_template_admin
+    - workflow_admin
+    - project_admin
+    - auditor
+
+- name: Add a dev user
+  ansible.controller.user:
+    first_name: "Debra"
+    last_name: "Developer"
+    username: "debra"
+    password: "Password1"
+    organization: "{{ org_app.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+
+- name: Give the dev user membership to the dev team
+  ansible.controller.role:
+    target_teams: ["dev-team"]
+    user: "debra"
+    role: "{{ item }}"
+    lookup_organization: "{{ org_app.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+  with_items:
+    - member
+    - read
+
+
+- name: Add a platform team
+  ansible.controller.team:
+    name: "platform-team"
+    description: "Platform Ops Team"
+    organization: "{{ org_platform.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+
+- name: Give the platform team rights on the platform organisation
+  ansible.controller.role:
+    team: "platform-team"
+    role: "{{ item }}"
+    organization: "{{ org_platform.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+  with_items:
+    - admin
+
+- name: Add a platform user
+  ansible.controller.user:
+    first_name: "Paul"
+    last_name: "Platform"
+    username: "paul"
+    password: "Password1"
+    organization: "{{ org_platform.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+
+- name: Give the platform user membership to the platform team
+  ansible.controller.role:
+    target_teams: ["platform-team"]
+    user: "paul"
+    role: "{{ item }}"
+    lookup_organization: "{{ org_platform.name }}"
+    state: present
+    tower_host: "{{ aap_host }}"
+    tower_username: "{{ aap_username }}"
+    tower_password: "{{ aap_password }}"
+  with_items:
+    - member
+    - read
+
+
+# EDA
+
 
 - name: Create an application for EDA to connect to
   ansible.controller.application:
