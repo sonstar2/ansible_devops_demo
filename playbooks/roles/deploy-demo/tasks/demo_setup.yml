@@ -437,7 +437,14 @@
     tower_username: "{{ aap_username }}"
     tower_password: "{{ aap_password }}"
   with_items:
-    - admin
+    - project_admin
+    - notification_admin
+    - inventory_admin
+    - credential_admin
+    - execution_environment_admin
+    - job_template_admin
+    - workflow_admin
+    - auditor
 
 - name: Add a platform user
   ansible.controller.user:
