@@ -19,7 +19,7 @@ https://demo.redhat.com/catalog?category=Open_Environments&item=babylon-catalog-
 6) Generate an AAP Licensing Manifest File (refer to https://docs.ansible.com/automation-controller/4.4/html/userguide/import_license.html#obtain-sub-manifest for details)
 7) Run the following command (substituting your relevant values):
 
-'ansible-playbook -i <inventory_file> -e ocp_host=https://<OpenShift API Hostname>:6443 -e ocp_username=kubeadmin -e ocp_password="<OpenShift Admin Password>" -e aap_manifest_path="<Local Path to AAP Manifest ZIP File for Licensing AAP>" -e snow_hostname="https://<ServiceNow_instance_hostname>" -e snow_password="<ServiceNow_admin_password>" ./playbooks/_deploy_demo_on_ocp.yml'
+`ansible-playbook -i <inventory_file> -e ocp_host=https://<OpenShift API Hostname>:6443 -e ocp_username=kubeadmin -e ocp_password="<OpenShift Admin Password>" -e aap_manifest_path="<Local Path to AAP Manifest ZIP File for Licensing AAP>" -e snow_hostname="https://<ServiceNow_instance_hostname>" -e snow_password="<ServiceNow_admin_password>" ./playbooks/_deploy_demo_on_ocp.yml`
 
 
 This will:
