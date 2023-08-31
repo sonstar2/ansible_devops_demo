@@ -12,7 +12,7 @@ network_cred_password: password
 managed_host: dummy_host.rapid.net
 
 # Details of a ServiceNow host
-snow_hostname: dev123456.servicenow.com
+snow_hostname: https://dev123456.service-now.com
 snow_username: admin
 snow_password: Password1
 

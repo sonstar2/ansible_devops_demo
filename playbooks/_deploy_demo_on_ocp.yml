@@ -189,7 +189,6 @@
             eda_username: "admin"
             eda_password: "{{ eda_admin_pwd.resources[0].data.password | b64decode }}"
 
-
       always:
         - name: If login succeeds, revoke the API key
           when: openshift_auth_results.openshift_auth.api_key is defined
@@ -213,3 +212,11 @@
     - name: Perform the actual demo deployment
       ansible.builtin.include_role:
         name: "deploy-demo"
+
+    - name: Display admin password for AAP
+      ansible.builtin.debug:
+        msg: "AAP Host is: {{ aap_host }} and Admin password is: '{{ aap_password }}'"
+
+    - name: Display admin password for EDA
+      ansible.builtin.debug:
+        msg: "EDA Host is: {{ eda_host }} and EDA Admin password is: '{{ eda_password }}'"
