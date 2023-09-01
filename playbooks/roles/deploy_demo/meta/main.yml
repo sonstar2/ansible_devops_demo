@@ -1,4 +1,4 @@
-galaxy_info:
+galaxy info:
   author: "dwaters@redhat.com"
   description: "Sets up an Ansible demonstration"
   company: "Red Hat"

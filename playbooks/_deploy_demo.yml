@@ -5,4 +5,4 @@
   tasks:
     - name: Run deployment
       ansible.builtin.include_role:
-        name: "deploy-demo"
+        name: "deploy_demo"

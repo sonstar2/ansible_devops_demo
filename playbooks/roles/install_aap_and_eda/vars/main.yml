@@ -1,0 +1,5 @@
+---
+# OCP Connection Information
+ocp_host: openshift.localdomain
+ocp_username: admin
+ocp_password: password
