@@ -1,7 +1,7 @@
 ---
 dependencies: []
 
-galaxy info:
+galaxy_info:
   author: "dwaters@redhat.com"
   description: "Sets up an Ansible demonstration"
   company: "Red Hat"
