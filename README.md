@@ -1,5 +1,5 @@
-# ansible_eda_demo
-Event-Driven Ansible Demo
+# ansible_devops_demo
+DevOps Automation with Event-Driven Ansible Demo
 
 To deploy:
 
