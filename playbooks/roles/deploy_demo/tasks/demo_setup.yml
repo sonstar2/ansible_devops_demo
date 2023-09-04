@@ -192,6 +192,7 @@
     description: "Sample App Deployment Workflow with ServiceNow integration and Multiple Teams"
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
+    webhook_service: "github"
     extra_vars:
       snow_hostname: "{{ snow_hostname }}"
       snow_username: "{{ snow_username }}"
