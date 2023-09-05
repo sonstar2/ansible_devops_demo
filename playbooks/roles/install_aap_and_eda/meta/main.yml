@@ -1,6 +1,7 @@
+---
 galaxy_info:
   author: "dwaters@redhat.com"
-  description: "Sets up an Ansible demonstration"
+  description: "Install AAP and EDA on OpenShift"
   company: "Red Hat"
 
   # If the issue tracker for your role is not on github, uncomment the
@@ -9,12 +10,12 @@ galaxy_info:
 
   license: "license (BSD-3-Clause)"
 
-  min_ansible_version: 2.1
+  min_ansible_version: "2.1"
 
   galaxy_tags:
     - ansible
     - aap
-    - security
+    - eda
+    - OpenShift
+    - ocp
     - demo
-
-dependencies: []
