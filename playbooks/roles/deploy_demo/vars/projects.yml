@@ -1,0 +1,26 @@
+---
+controller_projects_all:
+  - name: "{{ org_platform.name }}-demo"
+    description: "{{ org_platform.description }} Project"
+    organization: "{{ org_platform.name }}"
+    scm_type: git
+    scm_url: "{{ org_platform.repo }}"
+    scm_branch: main
+    scm_clean: true
+    scm_update_on_launch: true
+    update_project: true
+    wait: true
+    state: present
+
+  - name: "{{ org_app.name }}-demo"
+    description: "{{ org_app.description }} Project"
+    organization: "{{ org_app.name }}"
+    scm_type: git
+    scm_url: "{{ org_app.repo }}"
+    scm_branch: main
+    scm_clean: true
+    scm_update_on_launch: true
+    update_project: true
+    wait: true
+    state: present
+...

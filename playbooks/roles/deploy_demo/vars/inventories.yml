@@ -1,0 +1,7 @@
+---
+controller_inventories_all:
+  - name: "{{ org_platform.name }}-assets"
+    description: "{{ org_platform.description }} Asset List"
+    organization: "{{ org_platform.name }}"
+    state: present
+...

@@ -1,0 +1,12 @@
+---
+controller_teams_all:
+  - name: "dev-team"
+    description: "Application Development Team"
+    organization: "{{ org_app.name }}"
+    state: present
+    
+  - name: "platform-team"
+    description: "Platform Ops Team"
+    organization: "{{ org_platform.name }}"
+    state: present
+...

@@ -1,0 +1,15 @@
+---
+controller_user_accounts_all:
+  - user: "debra"
+    first_name: "Debra"
+    last_name: "Developer"
+    password: "Password1"
+    organization: "{{ org_app.name }}"
+    state: present
+
+  - user: "paul"
+    first_name: "Paul"
+    last_name: "Platform"
+    password: "Password1"
+    organization: "{{ org_platform.name }}"
+    state: present

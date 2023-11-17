@@ -1,0 +1,113 @@
+---
+controller_workflows:
+  - name: "rollout-app-impl"
+    description: "Sample App Deployment Workflow with ServiceNow integration and Multiple Teams"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    webhook_service: "github"
+    state: present
+    extra_vars:
+      snow_hostname: "{{ snow_hostname }}"
+      snow_username: "{{ snow_username }}"
+      snow_password: "{{ snow_password }}"
+      snow_cr_user: "{{ snow_username }}"
+      snow_cr_title: "Deploy VM Application"
+      snow_cr_description: "Provision infrastructure and deploy the VM-based application with TVT"
+      snow_incident_title: "Failed Application Deployment"
+      snow_incident_description: "Application Deployment failed due to error 12345"
+    simplified_workflow_nodes:
+      - identifier: 1-create
+        unified_job_template: "1-create-cr"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes:
+          - "2-prerollout"
+        credentials: []
+
+      - identifier: 2-prerollout
+        unified_job_template: "2-prerollout"
+        success_nodes:
+          - "3-provision"
+          - "S0-scheduled"
+        failure_nodes:
+          - "S2-failed"
+        always_nodes: []
+        credentials: []
+
+      - identifier: S0-scheduled
+        unified_job_template: "S.0-update-cr-status-scheduled"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes:
+          - "S1-started"
+        credentials: []
+
+      - identifier: S1-started
+        unified_job_template: "S.1-update-cr-status-started"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+
+      - identifier: S2-failed
+        unified_job_template: "S.2-update-cr-status-failed"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+
+      - identifier: 3-provision
+        unified_job_template: "3-provision"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes:
+          - "4-postprovision"
+        credentials: []
+
+      - identifier: 4-postprovision
+        unified_job_template: "4-postprovision"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes:
+          - "5-tvt"
+        credentials: []
+
+      - identifier: 5-tvt
+        unified_job_template: "5-tvt"
+        success_nodes:
+          - "S3-review"
+        failure_nodes:
+          - "I1-incident"
+        always_nodes: []
+        credentials: []
+
+      - identifier: S3-review
+        unified_job_template: "S.3-update-cr-status-review"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes:
+          - "S4-complete"
+        credentials: []
+
+      - identifier: S4-complete
+        unified_job_template: "S.4-update-cr-status-complete"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+
+      - identifier: I1-incident
+        unified_job_template: "I1-incident"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes:
+          - "S5-failed"
+        credentials: []
+
+      - identifier: S5-failed
+        unified_job_template: "S.2-update-cr-status-failed"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+...

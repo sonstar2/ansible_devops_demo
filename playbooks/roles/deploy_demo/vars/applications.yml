@@ -1,0 +1,11 @@
+---
+controller_applications_all:
+  - name: "eda"
+    description: "Event-Driven Ansible Connector"
+    organization: "{{ org_platform.name }}"
+    client_type: confidential
+    authorization_grant_type: authorization-code
+    redirect_uris:
+      - http://tower.com/api/v2/
+    state: present
+...

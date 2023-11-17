@@ -1,0 +1,145 @@
+---
+controller_templates_all:
+  - name: "1-create-cr"
+    playbook: "playbooks/snow_create_cr.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "2-prerollout"
+    playbook: "playbooks/prerollout_check.yml"
+    job_type: "run"
+    organization: "{{ org_app.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_app.name }}-demo"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "I1-incident"
+    playbook: "playbooks/snow_create_incident.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+  
+  - name: "3-provision"
+    playbook: "playbooks/provision_infrastructure.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "4-postprovision"
+    playbook: "playbooks/postprovision_configuration.yml"
+    job_type: "run"
+    organization: "{{ org_app.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_app.name }}-demo"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "5-tvt"
+    playbook: "playbooks/postrollout_tvt.yml"
+    job_type: "run"
+    organization: "{{ org_app.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_app.name }}-demo"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  # Make this a role would be a better plan
+  - name: "S.0-update-cr-status-scheduled"
+    playbook: "playbooks/snow_set_cr_status.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    extra_vars:
+      new_state: "scheduled"
+      assignment_group: "Software"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "S.1-update-cr-status-started"
+    playbook: "playbooks/snow_set_cr_status.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    extra_vars:
+      new_state: "implement"
+      assignment_group: "Software"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "S.2-update-cr-status-failed"
+    playbook: "playbooks/snow_set_cr_status.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    extra_vars:
+      new_state: "canceled"
+      assignment_group: "Software"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "S.3-update-cr-status-review"
+    playbook: "playbooks/snow_set_cr_status.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    extra_vars:
+      new_state: "review"
+      assignment_group: "Software"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "S.4-update-cr-status-complete"
+    playbook: "playbooks/snow_set_cr_status.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    extra_vars:
+      new_state: "closed"
+      assignment_group: "Software"
+      close_code: successful
+      close_notes: "Deployment performed successfully by Ansible Automation Platform"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  # Create a job template to launch a workflow template (ugh)
+  - name: "rollout-app"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    playbook: "playbooks/launch_workflow.yml"
+    extra_vars:
+      aap_hostname: "{{ aap_host }}"
+      aap_username: "{{ aap_username }}"
+      aap_password: "{{ aap_password }}"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+...
