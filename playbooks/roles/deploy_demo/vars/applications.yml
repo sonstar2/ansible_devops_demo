@@ -1,5 +1,5 @@
 ---
-controller_applications_all:
+controller_applications:
   - name: "eda"
     description: "Event-Driven Ansible Connector"
     organization: "{{ org_platform.name }}"

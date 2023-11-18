@@ -1,5 +1,5 @@
 ---
-controller_inventories_all:
+controller_inventories:
   - name: "{{ org_platform.name }}-assets"
     description: "{{ org_platform.description }} Asset List"
     organization: "{{ org_platform.name }}"

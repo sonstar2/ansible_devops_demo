@@ -1,5 +1,5 @@
 ---
-controller_templates_all:
+controller_templates:
   - name: "1-create-cr"
     playbook: "playbooks/snow_create_cr.yml"
     job_type: "run"

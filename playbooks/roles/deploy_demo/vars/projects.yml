@@ -1,5 +1,5 @@
 ---
-controller_projects_all:
+controller_projects:
   - name: "{{ org_platform.name }}-demo"
     description: "{{ org_platform.description }} Project"
     organization: "{{ org_platform.name }}"

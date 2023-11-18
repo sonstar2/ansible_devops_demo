@@ -19,6 +19,12 @@
         tower_username: "{{ aap_username }}"
         tower_password: "{{ aap_password }}"
 
+    - name: Set variables for the infra controller
+      ansible.builtin.set_fact:
+        controller_hostname: "{{ aap_host }}"
+        controller_username: "{{ aap_username }}"
+        controller_password: "{{ aap_password }}"
+
     - name: Perform the actual demo deployment
       ansible.builtin.include_role:
         name: "deploy_demo"
