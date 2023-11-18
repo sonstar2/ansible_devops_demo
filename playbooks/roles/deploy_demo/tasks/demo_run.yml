@@ -4,22 +4,22 @@
     workflow_template: "{{ lookup('ansible.controller.controller_api',
       'workflow_job_templates',
       query_params = { 'name' : 'rollout-app-impl' },
-      host = aap_host,
-      username = aap_username,
-      password = aap_password,
+      host = controller_hostname,
+      username = controller_username,
+      password = controller_password,
       verify_ssl = False) }}"
 
 - name: Set the webhook_receiver URL
   ansible.builtin.set_fact:
-    webhook_receiver: "https://{{ aap_host }}{{ workflow_template.related.webhook_receiver }}"
+    webhook_receiver: "https://{{ controller_hostname }}{{ workflow_template.related.webhook_receiver }}"
 
 - name: Try and get the webhook secret
   ansible.builtin.set_fact:
     key_deets: "{{ lookup('ansible.controller.controller_api',
       'workflow_job_templates/{{ workflow_template.id }}/webhook_key',
-      host = aap_host,
-      username = aap_username,
-      password = aap_password,
+      host = controller_hostname,
+      username = controller_username,
+      password = controller_password,
       verify_ssl = False) }}"
 
 - name: Set the webkook key
@@ -34,9 +34,9 @@
     scope: "write"
     application: "eda"
     state: present
-    tower_host: "{{ aap_host }}"
-    tower_username: "{{ aap_username }}"
-    tower_password: "{{ aap_password }}"
+    tower_host: "{{ controller_hostname }}"
+    tower_username: "{{ controller_username }}"
+    tower_password: "{{ controller_password }}"
   register: controller_oauthtoken
 
 - name: Store that token for later

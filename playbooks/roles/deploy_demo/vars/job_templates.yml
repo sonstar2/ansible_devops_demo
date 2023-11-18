@@ -136,9 +136,9 @@ controller_templates:
     project: "{{ org_platform.name }}-demo"
     playbook: "playbooks/launch_workflow.yml"
     extra_vars:
-      aap_hostname: "{{ aap_host }}"
-      aap_username: "{{ aap_username }}"
-      aap_password: "{{ aap_password }}"
+      controller_hostname: "{{ controller_hostname }}"
+      controller_username: "{{ controller_username }}"
+      controller_password: "{{ controller_password }}"
     credentials:
       - "{{ org_platform.name }}-network-access"
     state: present

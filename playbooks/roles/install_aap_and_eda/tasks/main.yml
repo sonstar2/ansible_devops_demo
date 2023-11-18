@@ -178,9 +178,9 @@
     # Set facts for the deploy_demo role
     - name: Set facts for demo deployment
       ansible.builtin.set_fact:
-        aap_host: "{{ aap_route.resources[0].spec.host }}"
-        aap_username: "admin"
-        aap_password: "{{ aap_admin_pwd.resources[0].data.password | b64decode }}"
+        controller_hostname: "{{ aap_route.resources[0].spec.host }}"
+        controller_username: "admin"
+        controller_password: "{{ aap_admin_pwd.resources[0].data.password | b64decode }}"
         eda_host: "{{ eda_route.resources[0].spec.host }}"
         eda_username: "admin"
         eda_password: "{{ eda_admin_pwd.resources[0].data.password | b64decode }}"

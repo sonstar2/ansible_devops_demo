@@ -13,6 +13,6 @@
       ansible.controller.workflow_launch:
         workflow_template: "rollout-app-impl"
         wait: false
-        controller_host: "{{ aap_hostname }}"
-        controller_username: "{{ aap_username }}"
-        controller_password: "{{ aap_password }}"
+        controller_host: "{{ controller_hostname }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"

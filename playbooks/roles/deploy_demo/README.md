@@ -30,9 +30,9 @@ organization-owned objects.
 Role Variables
 --------------
 
-aap_host: The hostname of the AAP controller instance
-aap_username: A username of a user with administrative access to the AAP controller instance
-aap_password: A password for a user with administrative access to the AAP controller instance
+controller_hostname: The hostname of the AAP controller instance
+controller_username: A username of a user with administrative access to the AAP controller instance
+controller_password: A password for a user with administrative access to the AAP controller instance
 
 network_cred_username: A username for a user account used to create a sample Credential in AAP
 network_cred_password: A password for a user account used to create a sample Credential in AAP
@@ -56,7 +56,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: derekwaters.deploy-eda-demo, aap_host: controller.local, aap_username: admin, aap_password: password, network_cred_username: rapid_svc, network_cred_password: password, managed_host: dummy_host.rapid.net }
+         - { role: derekwaters.deploy-eda-demo, controller_host: controller.local, controller_username: admin, controller_password: password, network_cred_username: rapid_svc, network_cred_password: password, managed_host: dummy_host.rapid.net }
 
 License
 -------

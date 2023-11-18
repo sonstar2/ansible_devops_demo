@@ -1,8 +1,0 @@
----
-- name: Destroy Demo Contents
-  hosts: all
-
-  tasks:
-    - name: Teardown deployment
-      ansible.builtin.include_role:
-        name: "teardown-demo"
