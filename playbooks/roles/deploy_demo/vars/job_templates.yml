@@ -84,6 +84,33 @@ controller_templates:
           variable: "assignment_group"
           required: true
           default: "Software"
+    credentials:
+      - "{{ org_platform.name }}-network-access"
+    state: present
+
+  - name: "S-update-cr-closed"
+    playbook: "playbooks/snow_set_cr_closed.yml"
+    job_type: "run"
+    organization: "{{ org_platform.name }}"
+    inventory: "{{ org_platform.name }}-assets"
+    project: "{{ org_platform.name }}-demo"
+    survey_enabled: yes
+    survey_spec:
+      name: "cr_details"
+      description: "New state details for CR"
+      spec:
+        - type: text
+          question_name: "new CR status"
+          question_description: "What is the new CR status?"
+          variable: "new_state"
+          required: true
+          default: "scheduled"
+        - type: text
+          question_name: "new CR assignment group"
+          question_description: "What is the new CR Assignment Group?"
+          variable: "assignment_group"
+          required: true
+          default: "Software"
         - type: text
           question_name: "close code for CR"
           question_description: "What is the close code for the CR?"

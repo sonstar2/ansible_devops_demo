@@ -102,7 +102,7 @@ controller_workflows:
           new_state: "closed"
           close_code: "successful"
           close_notes: "Software deployed successfully by AAP"
-        unified_job_template: "S-update-cr-status"
+        unified_job_template: "S-update-cr-closed"
         success_nodes: []
         failure_nodes: []
         always_nodes: []
