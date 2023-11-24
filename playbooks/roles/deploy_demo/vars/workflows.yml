@@ -35,7 +35,9 @@ controller_workflows:
         credentials: []
 
       - identifier: S0-scheduled
-        unified_job_template: "S.0-update-cr-status-scheduled"
+        extra_data:
+          new_state: "scheduled"
+        unified_job_template: "S-update-cr-status"
         success_nodes: []
         failure_nodes: []
         always_nodes:
@@ -43,14 +45,18 @@ controller_workflows:
         credentials: []
 
       - identifier: S1-started
-        unified_job_template: "S.1-update-cr-status-started"
+        extra_data:
+          new_state: "implement"
+        unified_job_template: "S-update-cr-status"
         success_nodes: []
         failure_nodes: []
         always_nodes: []
         credentials: []
 
       - identifier: S2-failed
-        unified_job_template: "S.2-update-cr-status-failed"
+        extra_data:
+          new_state: "canceled"
+        unified_job_template: "S-update-cr-status"
         success_nodes: []
         failure_nodes: []
         always_nodes: []
@@ -82,7 +88,9 @@ controller_workflows:
         credentials: []
 
       - identifier: S3-review
-        unified_job_template: "S.3-update-cr-status-review"
+        extra_data:
+          new_state: "review"
+        unified_job_template: "S-update-cr-status"
         success_nodes: []
         failure_nodes: []
         always_nodes:
@@ -90,7 +98,11 @@ controller_workflows:
         credentials: []
 
       - identifier: S4-complete
-        unified_job_template: "S.4-update-cr-status-complete"
+        extra_data:
+          new_state: "closed"
+          close_code: "successful"
+          close_notes: "Software deployed successfully by AAP"
+        unified_job_template: "S-update-cr-status"
         success_nodes: []
         failure_nodes: []
         always_nodes: []
@@ -105,7 +117,9 @@ controller_workflows:
         credentials: []
 
       - identifier: S5-failed
-        unified_job_template: "S.2-update-cr-status-failed"
+        extra_data:
+          new_state: "canceled"
+        unified_job_template: "S-update-cr-status"
         success_nodes: []
         failure_nodes: []
         always_nodes: []

@@ -29,7 +29,7 @@ controller_templates:
     credentials:
       - "{{ org_platform.name }}-network-access"
     state: present
-  
+
   - name: "3-provision"
     playbook: "playbooks/provision_infrastructure.yml"
     job_type: "run"
@@ -61,69 +61,41 @@ controller_templates:
     state: present
 
   # Make this a role would be a better plan
-  - name: "S.0-update-cr-status-scheduled"
+  - name: "S-update-cr-status"
     playbook: "playbooks/snow_set_cr_status.yml"
     job_type: "run"
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
     project: "{{ org_platform.name }}-demo"
-    extra_vars:
-      new_state: "scheduled"
-      assignment_group: "Software"
-    credentials:
-      - "{{ org_platform.name }}-network-access"
-    state: present
-
-  - name: "S.1-update-cr-status-started"
-    playbook: "playbooks/snow_set_cr_status.yml"
-    job_type: "run"
-    organization: "{{ org_platform.name }}"
-    inventory: "{{ org_platform.name }}-assets"
-    project: "{{ org_platform.name }}-demo"
-    extra_vars:
-      new_state: "implement"
-      assignment_group: "Software"
-    credentials:
-      - "{{ org_platform.name }}-network-access"
-    state: present
-
-  - name: "S.2-update-cr-status-failed"
-    playbook: "playbooks/snow_set_cr_status.yml"
-    job_type: "run"
-    organization: "{{ org_platform.name }}"
-    inventory: "{{ org_platform.name }}-assets"
-    project: "{{ org_platform.name }}-demo"
-    extra_vars:
-      new_state: "canceled"
-      assignment_group: "Software"
-    credentials:
-      - "{{ org_platform.name }}-network-access"
-    state: present
-
-  - name: "S.3-update-cr-status-review"
-    playbook: "playbooks/snow_set_cr_status.yml"
-    job_type: "run"
-    organization: "{{ org_platform.name }}"
-    inventory: "{{ org_platform.name }}-assets"
-    project: "{{ org_platform.name }}-demo"
-    extra_vars:
-      new_state: "review"
-      assignment_group: "Software"
-    credentials:
-      - "{{ org_platform.name }}-network-access"
-    state: present
-
-  - name: "S.4-update-cr-status-complete"
-    playbook: "playbooks/snow_set_cr_status.yml"
-    job_type: "run"
-    organization: "{{ org_platform.name }}"
-    inventory: "{{ org_platform.name }}-assets"
-    project: "{{ org_platform.name }}-demo"
-    extra_vars:
-      new_state: "closed"
-      assignment_group: "Software"
-      close_code: successful
-      close_notes: "Deployment performed successfully by Ansible Automation Platform"
+    survey_enabled: yes
+    survey_spec:
+      name: "cr_details"
+      description: "New state details for CR"
+      spec:
+        - type: text
+          question_name: "new CR status"
+          question_description: "What is the new CR status?"
+          variable: "new_state"
+          required: true
+          default: "scheduled"
+        - type: text
+          question_name: "new CR assignment group"
+          question_description: "What is the new CR Assignment Group?"
+          variable: "assignment_group"
+          required: true
+          default: "Software"
+        - type: text
+          question_name: "close code for CR"
+          question_description: "What is the close code for the CR?"
+          variable: "close_code"
+          required: true
+          default: "successful"
+        - type: text
+          question_name: "close notes for CR"
+          question_description: "What are the closure notes for the CR?"
+          variable: "close_notes"
+          required: true
+          default: "Deployment performed successfully"
     credentials:
       - "{{ org_platform.name }}-network-access"
     state: present
