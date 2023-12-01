@@ -5,7 +5,7 @@ controller_projects:
     organization: "{{ org_platform.name }}"
     scm_type: git
     scm_url: "{{ org_platform.repo }}"
-    scm_branch: support_multi_demos
+    scm_branch: main
     scm_clean: true
     scm_update_on_launch: true
     update_project: true
@@ -17,7 +17,7 @@ controller_projects:
     organization: "{{ org_app.name }}"
     scm_type: git
     scm_url: "{{ org_app.repo }}"
-    scm_branch: support_multi_demos
+    scm_branch: main
     scm_clean: true
     scm_update_on_launch: true
     update_project: true
