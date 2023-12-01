@@ -1,0 +1,12 @@
+---
+- name: Post-rollout Technical Verification Testing
+  hosts: all
+
+  tasks:
+    - name: Ensure Application is Ready For Test
+      ansible.builtin.pause:
+        seconds: 1
+    - name: Run Automated Technical Verification Test
+      ansible.builtin.fail:
+        msg: "TVT failed!"
+      when: rollout_status is defined and rollout_status == "fail_tvt"

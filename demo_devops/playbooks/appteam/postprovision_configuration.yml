@@ -1,0 +1,14 @@
+---
+- name: Post-provisioning Configuration
+  hosts: all
+
+  tasks:
+    - name: Apply Security Baseline
+      ansible.builtin.pause:
+        seconds: 1
+    - name: Install Application
+      ansible.builtin.pause:
+        seconds: 1
+    - name: Wait For Application Availability
+      ansible.builtin.pause:
+        seconds: 1
