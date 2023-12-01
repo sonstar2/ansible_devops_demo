@@ -3,6 +3,12 @@
   hosts: all
 
   tasks:
+    - name: Load the demo definition files
+      ansible.builtin.include_vars:
+        dir: "../{{ demo_name | default('demo_devops') }}/vars"
+        extensions:
+          - 'yml'
+
     - name: Run deployment
       ansible.builtin.include_role:
         name: "deploy_demo"

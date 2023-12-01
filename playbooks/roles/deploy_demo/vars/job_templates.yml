@@ -1,7 +1,7 @@
 ---
 controller_templates:
   - name: "1-create-cr"
-    playbook: "playbooks/snow_create_cr.yml"
+    playbook: "demo_devops/playbooks/platform/snow_create_cr.yml"
     job_type: "run"
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -11,7 +11,7 @@ controller_templates:
     state: present
 
   - name: "2-prerollout"
-    playbook: "playbooks/prerollout_check.yml"
+    playbook: "demo_devops/playbooks/appteam/prerollout_check.yml"
     job_type: "run"
     organization: "{{ org_app.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -21,7 +21,7 @@ controller_templates:
     state: present
 
   - name: "I1-incident"
-    playbook: "playbooks/snow_create_incident.yml"
+    playbook: "demo_devops/playbooks/platform/snow_create_incident.yml"
     job_type: "run"
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -31,7 +31,7 @@ controller_templates:
     state: present
 
   - name: "3-provision"
-    playbook: "playbooks/provision_infrastructure.yml"
+    playbook: "demo_devops/playbooks/platform/provision_infrastructure.yml"
     job_type: "run"
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -41,7 +41,7 @@ controller_templates:
     state: present
 
   - name: "4-postprovision"
-    playbook: "playbooks/postprovision_configuration.yml"
+    playbook: "demo_devops/playbooks/appteam/postprovision_configuration.yml"
     job_type: "run"
     organization: "{{ org_app.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -51,7 +51,7 @@ controller_templates:
     state: present
 
   - name: "5-tvt"
-    playbook: "playbooks/postrollout_tvt.yml"
+    playbook: "demo_devops/playbooks/appteam/postrollout_tvt.yml"
     job_type: "run"
     organization: "{{ org_app.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -62,7 +62,7 @@ controller_templates:
 
   # Make this a role would be a better plan
   - name: "S-update-cr-status"
-    playbook: "playbooks/snow_set_cr_status.yml"
+    playbook: "demo_devops/playbooks/platform/snow_set_cr_status.yml"
     job_type: "run"
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -89,7 +89,7 @@ controller_templates:
     state: present
 
   - name: "S-update-cr-closed"
-    playbook: "playbooks/snow_set_cr_closed.yml"
+    playbook: "demo_devops/playbooks/platform/snow_set_cr_closed.yml"
     job_type: "run"
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
@@ -133,7 +133,7 @@ controller_templates:
     organization: "{{ org_platform.name }}"
     inventory: "{{ org_platform.name }}-assets"
     project: "{{ org_platform.name }}-demo"
-    playbook: "playbooks/launch_workflow.yml"
+    playbook: "demo_devops/playbooks/platform/launch_workflow.yml"
     extra_vars:
       controller_hostname: "{{ controller_hostname }}"
       controller_username: "{{ controller_username }}"

@@ -28,4 +28,4 @@ org_platform:
 org_app:
   name: appowner
   description: Application Owner Team
-  repo: "https://github.com/derekwaters/ansible_devops_demo_appteam"
+  repo: "https://github.com/derekwaters/ansible_devops_demo"

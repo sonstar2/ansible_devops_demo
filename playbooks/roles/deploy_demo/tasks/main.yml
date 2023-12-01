@@ -1,7 +1,3 @@
 ---
-- ansible.builtin.include_vars:
-    dir: vars
-    extensions:
-      - 'yml'
 - ansible.builtin.include_tasks: demo_infra.yml
 - ansible.builtin.include_tasks: demo_run.yml
