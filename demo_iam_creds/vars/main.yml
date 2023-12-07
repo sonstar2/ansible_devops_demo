@@ -14,3 +14,6 @@ managed_host: dummy_host.rapid.net
 # Details for accessing Red Hat registry (to pull DE)
 registry_username: rh-access
 registry_token: abc123
+
+# The name of the main workflow to generate a webhook for
+webhook_workflow_template: access-and-automate-zone-b

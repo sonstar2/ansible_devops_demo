@@ -29,3 +29,6 @@ org_app:
   name: appowner
   description: Application Owner Team
   repo: "https://github.com/derekwaters/ansible_devops_demo"
+
+# The name of the main workflow to generate a webhook for
+webhook_workflow_template: rollout-app-impl
