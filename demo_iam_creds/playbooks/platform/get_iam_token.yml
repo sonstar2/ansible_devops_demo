@@ -16,11 +16,11 @@
       ansible.builtin.set_fact:
         assumed_cred: "{{ lookup('ansible.controller.controller_api',
           'credentials',
-          host=controller_hostname,
+          query_params = {'name': 'assumed_cred'},
+          host = controller_hostname,
           username = controller_username,
           password = controller_password,
-          verify_ssl = False,
-          query_params={'name': 'assumed_cred'}) }}"
+          verify_ssl = False) }}"
 
     - name: Show the credentials
       ansible.builtin.debug:

@@ -8,6 +8,10 @@ controller_templates:
     project: "platform-plays"
     credentials:
       - "base_cred"
+    extra_vars:
+      controller_hostname: "{{ controller_hostname }}"
+      controller_username: "{{ controller_username }}"
+      controller_password: "{{ controller_password }}"
     state: present
 
   - name: "automate_zone_b"
