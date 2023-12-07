@@ -1,0 +1,13 @@
+---
+- name: Perform some Zone B Automation
+  hosts: all
+
+
+  tasks:
+    - name: Pretend we're automating
+      ansible.builtin.pause:
+        seconds: 1
+
+    - name: Check we got here
+      ansible.builtin.debug:
+        msg: "Consider Zone B Automated"

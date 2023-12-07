@@ -1,0 +1,18 @@
+---
+controller_organizations:
+  - name: "platform"
+    description: "Automation Platform"
+    state: present
+    galaxy_credentials:
+      - ah_published
+      - ah_certified
+      - ah_community
+
+  - name: "users"
+    description: "User Team"
+    state: present
+    galaxy_credentials:
+      - ah_published
+      - ah_certified
+      - ah_community
+...

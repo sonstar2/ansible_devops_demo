@@ -1,0 +1,98 @@
+---
+controller_roles:
+  - team: "user-team"
+    role: "read"
+    organization: "users"
+    state: present
+
+  - team: "user-team"
+    role: "execute"
+    organization: "users"
+    state: present
+
+  - team: "user-team"
+    role: "job_template_admin"
+    organization: "users"
+    state: present
+
+  - team: "user-team"
+    role: "workflow_admin"
+    organization: "users"
+    state: present
+
+  - team: "user-team"
+    role: "project_admin"
+    organization: "users"
+    state: present
+
+  - team: "user-team"
+    role: "auditor"
+    organization: "users"
+    state: present
+
+  - user: "debra"
+    lookup_organization: "users"
+    team: "user-team"
+    role: member
+    state: present
+
+  - user: "debra"
+    lookup_organization: "users"
+    team: "user-team"
+    role: read
+    state: present
+
+
+  - team: "platform-team"
+    role: "project_admin"
+    organization: "platform"
+    state: present
+
+  - team: "platform-team"
+    role: "notification_admin"
+    organization: "platform"
+    state: present
+
+  - team: "platform-team"
+    role: "inventory_admin"
+    organization: "platform"
+    state: present
+
+  - team: "platform-team"
+    role: "credential_admin"
+    organization: "platform"
+    state: present
+
+  - team: "platform-team"
+    role: "execution_environment_admin"
+    organization: "platform"
+    state: present
+
+  - team: "platform-team"
+    role: "job_template_admin"
+    organization: "platform"
+    state: present
+
+  - team: "platform-team"
+    role: "workflow_admin"
+    organization: "platform"
+    state: present
+
+  - team: "platform-team"
+    role: "auditor"
+    organization: "platform"
+    state: present
+
+
+  - user: "paul"
+    lookup_organization: "platform"
+    team: "platform-team"
+    role: member
+    state: present
+
+  - user: "paul"
+    lookup_organization: "platform"
+    team: "platform-team"
+    role: read
+    state: present
+...

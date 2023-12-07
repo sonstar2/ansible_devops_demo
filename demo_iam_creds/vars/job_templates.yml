@@ -1,0 +1,22 @@
+---
+controller_templates:
+  - name: "get_iam_token"
+    playbook: "demo_iam_creds/playbooks/platform/get_iam_token.yml"
+    job_type: "run"
+    organization: "platform"
+    inventory: "zone-b-assets"
+    project: "platform-plays"
+    credentials:
+      - "base_cred"
+    state: present
+
+  - name: "automate_zone_b"
+    playbook: "demo_iam_creds/playbooks/users/automate_zone_b.yml"
+    job_type: "run"
+    organization: "users"
+    inventory: "zone-b-assets"
+    project: "users-plays"
+    credentials:
+      - "assumed_cred"
+    state: present
+...

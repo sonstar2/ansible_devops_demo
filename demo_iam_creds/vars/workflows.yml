@@ -1,0 +1,24 @@
+---
+controller_workflows:
+  - name: "access-and-automate-zone-b"
+    description: "Automate Zone B with IAM Role Assumption"
+    organization: "platform"
+    inventory: "zone-b-assets"
+    webhook_service: "github"
+    state: present
+    simplified_workflow_nodes:
+      - identifier: get_iam_token
+        unified_job_template: "get_iam_token"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes:
+          - "automate_zone_b"
+        credentials: []
+
+      - identifier: automate_zone_b
+        unified_job_template: "automate_zone_b"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+...
