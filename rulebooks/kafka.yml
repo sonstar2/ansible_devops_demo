@@ -11,6 +11,22 @@
   rules:
     - name: Debug demo event
       condition: event.message is defined
-      action:
-        debug:
-          var: event
+      actions:
+        - print_event:
+            pretty: true
+        - run_job_template:
+            name: eda-debug
+            organization: Default
+            job_args:
+              debug_type: matched
+    - name: Fallthrough?
+      condition: event.message is not defined
+      actions:
+        - print_event:
+            pretty: true
+        - run_job_template:
+            name: eda-debug
+            organization: Default
+            job_args:
+              debug_type: fall_through
+
