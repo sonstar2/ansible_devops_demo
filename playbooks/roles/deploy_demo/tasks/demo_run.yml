@@ -3,7 +3,7 @@
   ansible.builtin.set_fact:
     workflow_template: "{{ lookup('ansible.controller.controller_api',
       'workflow_job_templates',
-      query_params = { 'name' : 'rollout-app-impl' },
+      query_params = { 'name' : webhook_workflow_template },
       host = controller_hostname,
       username = controller_username,
       password = controller_password,

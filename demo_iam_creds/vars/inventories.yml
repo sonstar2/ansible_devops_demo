@@ -1,0 +1,7 @@
+---
+controller_inventories:
+  - name: "zone-b-assets"
+    description: "AWS Zone B Asset List"
+    organization: "platform"
+    state: present
+...

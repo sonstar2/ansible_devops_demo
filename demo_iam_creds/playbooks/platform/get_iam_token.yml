@@ -1,0 +1,42 @@
+---
+- name: Get IAM Token
+  hosts: all
+
+
+  tasks:
+    - name: Generate a new IAM Token
+      ansible.builtin.set_fact:
+        new_token: "{{ lookup('password', '/dev/null chars=ascii_letters,digit length=32') | lower }}"
+
+    - name: Show the new token
+      ansible.builtin.debug:
+        var: "new_token"
+
+    - name: Retrieve the assumed_cred credential
+      ansible.builtin.set_fact:
+        assumed_cred: "{{ lookup('ansible.controller.controller_api',
+          'credentials',
+          query_params = {'name': 'assumed_cred'},
+          host = controller_hostname,
+          username = controller_username,
+          password = controller_password,
+          verify_ssl = False) }}"
+
+    - name: Show the credentials
+      ansible.builtin.debug:
+        var: "assumed_cred"
+
+    - name: Update the assumed_cred credential
+      ansible.controller.credential:
+        name: "{{ assumed_cred.name }}"
+        description: "{{ assumed_cred.description }}"
+        organization: "{{ assumed_cred.organization }}"
+        credential_type: "{{ assumed_cred.credential_type }}"
+        inputs:
+          security_token: "{{ new_token }}"
+          username: "{{ assumed_cred.inputs.username }}"
+          password: "{{ assumed_cred.inputs.password }}"
+        state: present
+        controller_host: "{{ controller_hostname }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
