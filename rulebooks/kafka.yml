@@ -4,9 +4,9 @@
   sources:
     - name: Listen to Kafka server broker
       ansible.eda.kafka:
-        topic: "{{ kafka-topic }}"
-        host: "{{ kafka-hostname }}"
-        port: "{{ kafka-port }}"
+        topic: "{{ kafkatopic }}"
+        host: "{{ kafkahostname }}"
+        port: "{{ kafkaport }}"
         check_hostname: false
   rules:
     - name: Debug demo event
