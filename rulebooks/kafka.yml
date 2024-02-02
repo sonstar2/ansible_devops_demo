@@ -9,7 +9,7 @@
         port: "{{ kafkaport }}"
         group_id: "{{ kafkagroupid }}"
         check_hostname: false
-        vertify_mode: CERT_OPTIONAL
+        verify_mode: CERT_OPTIONAL
   rules:
     - name: Debug demo event
       condition: event.meta is defined
