@@ -9,9 +9,10 @@
         port: "{{ kafkaport }}"
         group_id: "{{ kafkagroupid }}"
         check_hostname: false
+        vertify_mode: CERT_OPTIONAL
   rules:
     - name: Debug demo event
-      condition: event.message is defined
+      condition: event.meta is defined
       actions:
         - print_event:
             pretty: true
@@ -21,7 +22,7 @@
             job_args:
               debug_type: matched
     - name: Fallthrough?
-      condition: event.message is not defined
+      condition: event.meta is not defined
       actions:
         - print_event:
             pretty: true
