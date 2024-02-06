@@ -1,0 +1,21 @@
+---
+- name: Run a defined job template for Kafka events
+  hosts: all
+  sources:
+    - name: Listen to Kafka server broker
+      ansible.eda.kafka:
+        topic: "{{ kafkatopic }}"
+        host: "{{ kafkahostname }}"
+        port: "{{ kafkaport }}"
+        group_id: "{{ kafkagroupid }}"
+        check_hostname: false
+        verify_mode: CERT_OPTIONAL
+  rules:
+    - name: Trigger automation job
+      condition: event.meta is defined
+      actions:
+        - run_job_template:
+            name: "{{ aapjobtemplatename }}"
+            organization: Default
+            extra_vars:
+              trigger_type: event_has_meta
