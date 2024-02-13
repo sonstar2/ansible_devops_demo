@@ -1,0 +1,14 @@
+---
+- name: Test launching a job template from a URI call
+  hosts: all
+
+  tasks:
+    - name: Launch the job
+      ansible.builtin.uri:
+        url: "https://{{ base_url }}/api/v2/job_templates/{{ template_id }}/launch/"
+        method: POST
+      register: launch_results
+
+    - name: Debug the results
+      ansible.builtin.debug:
+        var: launch_results

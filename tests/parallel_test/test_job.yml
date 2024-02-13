@@ -1,0 +1,12 @@
+---
+- name: Simulate a test run
+  hosts: all
+
+  tasks:
+    - name: Take some time
+      ansible.builtin.pause:
+        seconds: "{{ job_timeout }}"
+
+    - name: Are we done?
+      ansible.builtin.debug:
+        msg: "The test is done"
