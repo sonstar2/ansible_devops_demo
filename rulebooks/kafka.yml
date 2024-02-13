@@ -1,16 +1,34 @@
 ---
 - name: Listen for Kafka events
-  hosts: localhost
+  hosts: all
   sources:
     - name: Listen to Kafka server broker
       ansible.eda.kafka:
-        topic: eda-topic
-        host: "{{ kafka_hostname }}"
-        port: 9092
+        topic: "{{ kafkatopic }}"
+        host: "{{ kafkahostname }}"
+        port: "{{ kafkaport }}"
+        group_id: "{{ kafkagroupid }}"
         check_hostname: false
+        verify_mode: CERT_OPTIONAL
   rules:
     - name: Debug demo event
-      condition: event.message is defined
-      action:
-        debug:
-          var: event
+      condition: event.meta is defined
+      actions:
+        - print_event:
+            pretty: true
+        - run_job_template:
+            name: eda-debug
+            organization: Default
+            job_args:
+              debug_type: matched
+    - name: Fallthrough?
+      condition: event.meta is not defined
+      actions:
+        - print_event:
+            pretty: true
+        - run_job_template:
+            name: eda-debug
+            organization: Default
+            job_args:
+              debug_type: fall_through
+

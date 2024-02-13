@@ -1,0 +1,27 @@
+---
+- name: Run a defined job template for Kafka events
+  hosts: all
+  sources:
+    - name: Listen to Kafka server broker
+      ansible.eda.kafka:
+        topic: "{{ kafkatopic }}"
+        host: "{{ kafkahostname }}"
+        port: "{{ kafkaport }}"
+        group_id: "{{ kafkagroupid }}"
+        # Note that the following lines are insecure and should
+        # not be used in a production environment
+        check_hostname: false
+        verify_mode: CERT_OPTIONAL
+  rules:
+    - name: Trigger automation job
+      # The following condition should be triggered for every
+      # Kafka event. A proper rulebook would apply filtering
+      # to the events (on event.body.*) to limit the number
+      # of triggered actions
+      condition: event.meta is defined
+      actions:
+        - run_job_template:
+            name: "{{ aapjobtemplatename }}"
+            organization: Default
+            extra_vars:
+              trigger_type: event_has_meta
