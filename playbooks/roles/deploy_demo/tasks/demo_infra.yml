@@ -60,31 +60,4 @@
   ansible.builtin.include_role:
     name: infra.controller_configuration.roles
   when: controller_roles is defined
-
-# Deploy EDA Configuration
-
-- name: Include EDA tokens role
-  ansible.builtin.include_role:
-    name: infra.eda_configuration.user_token
-  when: eda_user_tokens is defined
-
-- name: Include EDA credentials role
-  ansible.builtin.include_role:
-    name: infra.eda_configuration.credential
-  when: eda_credentials is defined
-
-- name: Include EDA projects role
-  ansible.builtin.include_role:
-    name: infra.eda_configuration.project
-  when: eda_projects is defined
-
-- name: Include EDA decision environments role
-  ansible.builtin.include_role:
-    name: infra.eda_configuration.decision_environment
-  when: eda_decision_environments is defined
-
-- name: Include EDA activations role
-  ansible.builtin.include_role:
-    name: infra.eda_configuration.rulebook_activation
-  when: eda_rulebook_activations is defined
 ...

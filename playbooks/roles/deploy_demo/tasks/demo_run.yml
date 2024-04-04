@@ -8,10 +8,12 @@
       username = controller_username,
       password = controller_password,
       verify_ssl = False) }}"
+  when: webhook_workflow_template is defined
 
 - name: Set the webhook_receiver URL
   ansible.builtin.set_fact:
     webhook_receiver: "https://{{ controller_hostname }}{{ workflow_template.related.webhook_receiver }}"
+  when: webhook_workflow_template is defined
 
 - name: Try and get the webhook secret
   ansible.builtin.set_fact:
@@ -21,10 +23,12 @@
       username = controller_username,
       password = controller_password,
       verify_ssl = False) }}"
+  when: webhook_workflow_template is defined
 
 - name: Set the webkook key
   ansible.builtin.set_fact:
     webhook_key: "{{ key_deets.webhook_key }}"
+  when: webhook_workflow_template is defined
 
 
 
@@ -32,7 +36,7 @@
   ansible.controller.token:
     description: "Ansible EDA Access Token"
     scope: "write"
-    application: "eda"
+    # application: "eda"
     state: present
     tower_host: "{{ controller_hostname }}"
     tower_username: "{{ controller_username }}"
@@ -50,3 +54,4 @@
 - name: Write out webhook details for GitHub
   ansible.builtin.debug:
     msg: "Webhook for workflow - URL: {{ webhook_receiver }}    Key: {{ webhook_key }}"
+  when: webhook_workflow_template is defined

@@ -1,3 +1,4 @@
 ---
 - ansible.builtin.include_tasks: demo_infra.yml
 - ansible.builtin.include_tasks: demo_run.yml
+- ansible.builtin.include_tasks: demo_eda_infra.yml
