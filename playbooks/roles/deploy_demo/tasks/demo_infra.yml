@@ -60,4 +60,31 @@
   ansible.builtin.include_role:
     name: infra.controller_configuration.roles
   when: controller_roles | length is not match('0')
+
+# Deploy EDA Configuration
+
+- name: Include EDA tokens role
+  ansible.builtin.include_role:
+    name: infra.eda_configuration.user_token
+  when: eda_user_tokens | length is not match('0')
+
+- name: Include EDA credentials role
+  ansible.builtin.include_role:
+    name: infra.eda_configuration.credential
+  when: eda_credentials | length is not match('0')
+
+- name: Include EDA projects role
+  ansible.builtin.include_role:
+    name: infra.eda_configuration.project
+  when: eda_projects | length is not match('0')
+
+- name: Include EDA decision environments role
+  ansible.builtin.include_role:
+    name: infra.eda_configuration.decision_environment
+  when: eda_decision_environments | length is not match('0')
+
+- name: Include EDA activations role
+  ansible.builtin.include_role:
+    name: infra.eda_configuration.rulebook_activation
+  when: eda_rulebook_activations | length is not match('0')
 ...
