@@ -55,7 +55,7 @@ controller_templates:
     project: "augment-incident-project"
     ask_variables_on_launch: true
     extra_vars:
-      snow_instance: "{{ snow_isntance }}"
+      snow_instance: "{{ snow_hostname }}"
       snow_username: "{{ snow_username }}"
       snow_password: "{{ snow_password }}"
       dummy_messages_log: >

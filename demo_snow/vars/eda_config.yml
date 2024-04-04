@@ -15,7 +15,7 @@ eda_rulebook_activations:
     decision_environment: augment-incident-de
     awx_token: aap-token
     extra_vars:
-      snow_instance: "{{ snow_instance }}"
+      snow_instance: "{{ snow_hostname }}"
       snow_username: "{{ snow_username }}"
       snow_password: "{{ snow_password }}"
     restart_policy: always
