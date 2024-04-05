@@ -5,15 +5,15 @@ eda_projects:
     url: https://github.com/derekwaters/ansible_devops_demo
 eda_decision_environments:
   - name: augment-incident-de
-    description: ServiceNow Incident Augmentation Demo
-    image_url: "registry.redhat.io/ansible-automation-platform-24/de-supported-rhel8"
+    description: ServiceNow Incident Augmentation Demo (with cloin SNOW collection)
+    image_url: "quay.io/rh-ee-dwaters/snow-de"
 eda_rulebook_activations:
   - name: augment-incident
     description: ServiceNow Incident Augmentation Demo
     project: augment-incident-project
     rulebook: snow_incident_listener.yml
     decision_environment: augment-incident-de
-    awx_token: aap-token
+    awx_token: "aap-token"
     extra_vars:
       snow_instance: "{{ snow_hostname }}"
       snow_username: "{{ snow_username }}"
