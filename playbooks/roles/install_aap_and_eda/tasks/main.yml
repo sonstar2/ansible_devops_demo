@@ -92,6 +92,8 @@
           spec:
             replicas: 1
         state: present
+      retries: 10
+      delay: 30
 
     - name: Get AAP URL (when AAP Controller is available)
       kubernetes.core.k8s_info:
@@ -136,7 +138,7 @@
             namespace: aap
           spec:
             replicas: 1
-            automation_server_url: "{{ aap_route.resources[0].spec.port.targetPort }}://{{ aap_route.resources[0].spec.host }}"
+            automation_server_url: "https://{{ aap_route.resources[0].spec.host }}"
         state: present
 
     - name: Get EDA admin password (when EDA is available)

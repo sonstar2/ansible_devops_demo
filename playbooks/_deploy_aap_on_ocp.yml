@@ -140,7 +140,7 @@
                 namespace: aap
               spec:
                 replicas: 1
-                automation_server_url: "{{ aap_route.resources[0].spec.port.targetPort }}://{{ aap_route.resources[0].spec.host }}"
+                automation_server_url: "https://{{ aap_route.resources[0].spec.host }}"
             state: present
 
         - name: Get EDA admin password (when EDA is available)

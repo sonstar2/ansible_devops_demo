@@ -18,6 +18,8 @@
         tower_host: "{{ controller_hostname }}"
         tower_username: "{{ controller_username }}"
         tower_password: "{{ controller_password }}"
+      retries: 10
+      delay: 30
 
     - name: Set variables for the infra controller
       ansible.builtin.set_fact:
