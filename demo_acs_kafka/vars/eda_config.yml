@@ -13,8 +13,8 @@ eda_rulebook_activations:
     project: acs_kafka_demo
     rulebook: kafka_trigger_job.yml
     decision_environment: acs_kafka_demo_de
-    awx_token: "aap-token"
-    variables:
+    awx_token: "aap_token"
+    extra_vars:
       kafkatopic: "{{ kafkatopic }}"
       kafkahostname: "{{ kafkahostname }}"
       kafkaport: "{{ kafkaport }}"
