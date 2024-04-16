@@ -1,0 +1,29 @@
+---
+eda_projects:
+  - name: acs_kafka_demo
+    description: ACS Kafka Broker Demo
+    url: https://github.com/derekwaters/ansible_devops_demo
+eda_decision_environments:
+  - name: acs_kafka_demo_de
+    description: ACS Kafka Broker Demo
+    image_url: "registry.redhat.io/ansible-automation-platform-24/de-supported-rhel8"
+eda_rulebook_activations:
+  - name: acs_kafka_demo_listener
+    description: ACS Kafka Broker Demo
+    project: acs_kafka_demo
+    rulebook: kafka_trigger_job.yml
+    decision_environment: acs_kafka_demo_de
+    awx_token: "aap-token"
+    variables:
+      kafkatopic: "{{ kafkatopic }}"
+      kafkahostname: "{{ kafkahostname }}"
+      kafkaport: "{{ kafkaport }}"
+      kafkagroupid: "{{ kafkagroupid }}"
+      aapjobtemplatename: "acs-kafka-remediate"
+    restart_policy: always
+    is_enabled: True
+    state: present
+eda_user_tokens:
+  - name: aap_token
+    description: Default AAP Access Token
+    token: "{{ awx_token }}"

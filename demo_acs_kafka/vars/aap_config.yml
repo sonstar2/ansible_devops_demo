@@ -1,0 +1,36 @@
+---
+controller_organizations:
+  - name: "midrange"
+    description: "MidRange Incidents Team"
+    state: present
+    galaxy_credentials:
+      - ah_published
+      - ah_certified
+      - ah_community
+controller_projects:
+  - name: "acs-kafka-project"
+    description: "ACS Kafka Broker Demo"
+    organization: "midrange"
+    scm_type: git
+    scm_url: "https://github.com/simondelord/ansible.git"
+    scm_branch: main
+    scm_clean: true
+    scm_update_on_launch: true
+    update_project: true
+    wait: true
+    state: present
+controller_templates:
+  - name: "acs-kafka-remediate"
+    playbook: "acs-kafka-aap.yaml"
+    job_type: "run"
+    organization: "midrange"
+    inventory: "Demo Inventory"
+    project: "acs-kafka-project"
+    ask_variables_on_launch: true
+    extra_vars:
+      api_key: "{{ api_key }}"
+      host: "{{ ocp_host }}"
+    credentials:
+      - "Demo Credential"
+    state: present
+...
