@@ -1,7 +1,7 @@
 ---
 - name: Build the ee_aws image (use the ee_builder EE to do so)
   hosts: localhost
-  gather_facts: false
+  gather_facts: true
   collections:
     - infra.ee_utilities
   vars:
@@ -35,6 +35,7 @@
     - name: WhoonearthamI
       ansible.builtin.debug:
         var: ansible_facts
-        
-  roles:
-    - infra.ee_utilities.ee_builder
+
+    - name: Do the builder thingo
+      ansible.builtin.include_role:
+        name: infra.ee_utilities.ee_builder
