@@ -12,6 +12,9 @@ galaxy_info:
 
   min_ansible_version: "2.1"
 
+  dependencies:
+    - redhat.openshift
+
   galaxy_tags:
     - ansible
     - aap
