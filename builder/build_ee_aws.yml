@@ -13,6 +13,7 @@
     ee_registry_dest: "quay.io/rh-ee-dwaters"
     ee_registry_username: rh-ee-dwaters
     ee_registry_password: "{{ registrypwd }}"
+    ee_pull_collections_from_hub: false
     ee_verbosity: 3
 
     ee_list:
@@ -29,5 +30,11 @@
           galaxy:
             collections:
               - amazon.aws
+
+  tasks:
+    - name: WhoonearthamI
+      ansible.builtin.debug:
+        var: ansible_facts
+        
   roles:
     - infra.ee_utilities.ee_builder
