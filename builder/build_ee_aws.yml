@@ -7,11 +7,18 @@
   vars:
     ee_builder_dir_clean: false
     ee_builder_dir: "."
-    ee_update_base_images: false
-    ee_base_image: "quay.io/rh-ee-dwaters/ee-dwaters:latest"
-    ee_registry_dest: TBD
+    ee_base_registry_username: rh-ee-dwaters
+    ee_base_registry_password: "{{ registrypwd }}"
+    ee_base_image: registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest
+    ee_registry_dest: "quay.io/rh-ee-dwaters"
+    ee_registry_username: rh-ee-dwaters
+    ee_registry_password: "{{ registrypwd }}"
+
     ee_list:
       - name: ee_aws
+        images:
+          base_image: 
+            name: registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest
         alt_name: EE for Management of AWS
         tag: 1.0
         dependencies:
