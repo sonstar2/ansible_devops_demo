@@ -11,6 +11,7 @@
     ee_registry_dest: "quay.io/rh-ee-dwaters"
     ee_registry_username: rh-ee-dwaters
     ee_registry_password: "{{ registrypwd }}"
+    ee_verbosity: 3
 
     ee_list:
       - name: ee_auto_aws
