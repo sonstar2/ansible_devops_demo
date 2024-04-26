@@ -24,20 +24,32 @@ images:
     name: "registry.redhat.io/ansible-automation-platform/ee-minimal-rhel9:2.16.5-2"
 
 dependencies:
+  system:
+    - fuse-overlayfs
   python:
     - ansible-builder
   galaxy: requirements.yml
+
+additional_build_files:
+  - src: files/containers.conf
+    dest: configs
+  - src: files/storage.conf
+    dest: configs
 
 additional_build_steps:
   prepend_final:
     - RUN useradd podman;
     - RUN echo podman:10000:5000 > /etc/subuid;
     - RUN echo podman:10000:5000 > /etc/subgid;
-      #- VOLUME /home/podman/.local/share/containers
+    - COPY _build/configs/containers.conf /home/podman/.config/containers/containers.conf
+    - RUN mkdir -p /home/podman/.local/share/containers
     - RUN chown podman:podman -R /home/podman
-      #- RUN chown podman:podman -R /home/podman/.local/share/containers
+    - COPY _build/configs/storage.conf /etc/containers/storage.conf
+    - RUN sed -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' -e 's|^mountopt[[:space:]]*=.*$|mountopt = "nodev,fsync=0"|g' /etc/containers/storage.conf
+    - RUN mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers /var/lib/shared/vfs-images /var/lib/shared/vfs-layers; touch /var/lib/shared/overlay-images/images.lock; touch /var/lib/shared/overlay-layers/layers.lock; touch /var/lib/shared/vfs-images/images.lock; touch /var/lib/shared/vfs-layers/layers.lock
+    - VOLUME /home/podman/.local/share/containers
     - ENV _CONTAINERS_USERNS_CONFIGURED=""
-
+    - ENV BUILDAH_ISOLATION=chroot
 
 options:
   package_manager_path: /usr/bin/microdnf

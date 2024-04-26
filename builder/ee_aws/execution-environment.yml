@@ -28,7 +28,8 @@ dependencies:
     - botocore
     - boto3
   galaxy:
-    - amazon.aws
+    collections:
+      - amazon.aws
 
 options:
   package_manager_path: /usr/bin/microdnf
