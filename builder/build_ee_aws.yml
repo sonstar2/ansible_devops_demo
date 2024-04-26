@@ -1,6 +1,7 @@
 ---
 - name: Build the ee_aws image (use the ee_builder EE to do so)
   hosts: localhost
+  connection: local
   gather_facts: true
   collections:
     - infra.ee_utilities
