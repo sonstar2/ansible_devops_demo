@@ -33,6 +33,8 @@ dependencies:
 additional_build_files:
   - src: files/containers.conf
     dest: configs
+  - src: files/root_containers.conf
+    dest: configs
   - src: files/storage.conf
     dest: configs
 
@@ -41,13 +43,17 @@ additional_build_steps:
     - RUN useradd podman;
     - RUN echo podman:10000:5000 > /etc/subuid;
     - RUN echo podman:10000:5000 > /etc/subgid;
+    - RUN echo root:20000:5000 >> /etc/subuid;
+    - RUN echo root:20000:5000 >> /etc/subgid;
     - COPY _build/configs/containers.conf /home/podman/.config/containers/containers.conf
+    - COPY _build/configs/root_containers.conf /etc/containers/containers.conf
     - RUN mkdir -p /home/podman/.local/share/containers
     - RUN chown podman:podman -R /home/podman
     - COPY _build/configs/storage.conf /etc/containers/storage.conf
     - RUN sed -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' -e 's|^mountopt[[:space:]]*=.*$|mountopt = "nodev,fsync=0"|g' /etc/containers/storage.conf
     - RUN mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers /var/lib/shared/vfs-images /var/lib/shared/vfs-layers; touch /var/lib/shared/overlay-images/images.lock; touch /var/lib/shared/overlay-layers/layers.lock; touch /var/lib/shared/vfs-images/images.lock; touch /var/lib/shared/vfs-layers/layers.lock
     - VOLUME /home/podman/.local/share/containers
+    - VOLUME /var/lib/containers
     - ENV _CONTAINERS_USERNS_CONFIGURED=""
     - ENV BUILDAH_ISOLATION=chroot
 
