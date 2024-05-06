@@ -48,6 +48,7 @@ additional_build_steps:
     - COPY _build/configs/containers.conf /home/podman/.config/containers/containers.conf
     - COPY _build/configs/root_containers.conf /etc/containers/containers.conf
     - RUN mkdir -p /home/podman/.local/share/containers
+    - RUN mkdir -p /runner/libpod/tmp
     - RUN chown podman:podman -R /home/podman
     - COPY _build/configs/storage.conf /etc/containers/storage.conf
     - RUN sed -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' -e 's|^mountopt[[:space:]]*=.*$|mountopt = "nodev,fsync=0"|g' /etc/containers/storage.conf
