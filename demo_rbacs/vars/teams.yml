@@ -1,0 +1,12 @@
+---
+controller_teams:
+  - name: "dev-team"
+    description: "Application Development Team"
+    organization: "user"
+    state: present
+    
+  - name: "platform-team"
+    description: "Platform Ops Team"
+    organization: "platform"
+    state: present
+...

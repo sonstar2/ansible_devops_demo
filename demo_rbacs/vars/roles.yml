@@ -1,0 +1,98 @@
+---
+controller_roles:
+  - team: "dev-team"
+    role: "read"
+    organization: "{{ org_app.name }}"
+    state: present
+
+  - team: "dev-team"
+    role: "execute"
+    organization: "{{ org_app.name }}"
+    state: present
+
+  - team: "dev-team"
+    role: "job_template_admin"
+    organization: "{{ org_app.name }}"
+    state: present
+
+  - team: "dev-team"
+    role: "workflow_admin"
+    organization: "{{ org_app.name }}"
+    state: present
+
+  - team: "dev-team"
+    role: "project_admin"
+    organization: "{{ org_app.name }}"
+    state: present
+
+  - team: "dev-team"
+    role: "auditor"
+    organization: "{{ org_app.name }}"
+    state: present
+
+  - user: "debra"
+    lookup_organization: "{{ org_app.name }}"
+    team: "dev-team"
+    role: member
+    state: present
+
+  - user: "debra"
+    lookup_organization: "{{ org_app.name }}"
+    team: "dev-team"
+    role: read
+    state: present
+
+
+  - team: "platform-team"
+    role: "project_admin"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+  - team: "platform-team"
+    role: "notification_admin"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+  - team: "platform-team"
+    role: "inventory_admin"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+  - team: "platform-team"
+    role: "credential_admin"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+  - team: "platform-team"
+    role: "execution_environment_admin"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+  - team: "platform-team"
+    role: "job_template_admin"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+  - team: "platform-team"
+    role: "workflow_admin"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+  - team: "platform-team"
+    role: "auditor"
+    organization: "{{ org_platform.name }}"
+    state: present
+
+
+  - user: "paul"
+    lookup_organization: "{{ org_platform.name }}"
+    team: "platform-team"
+    role: member
+    state: present
+
+  - user: "paul"
+    lookup_organization: "{{ org_platform.name }}"
+    team: "platform-team"
+    role: read
+    state: present
+...

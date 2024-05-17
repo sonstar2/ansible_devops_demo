@@ -1,0 +1,7 @@
+---
+controller_inventories:
+  - name: "platform-inventory"
+    description: "Asset List"
+    organization: "platform"
+    state: present
+...

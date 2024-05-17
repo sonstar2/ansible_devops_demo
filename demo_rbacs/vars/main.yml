@@ -1,0 +1,8 @@
+---
+# AAP Host Connection Information
+controller_hostname: controller.localdomain
+controller_username: admin
+controller_password: password
+
+# Name of a managed host to add to the sample organization Inventory
+managed_host: dummy_host.rapid.net

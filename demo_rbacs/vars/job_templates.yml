@@ -1,0 +1,12 @@
+---
+controller_templates:
+  - name: "debug_test"
+    playbook: "demo_rbacs/playbooks/test_inventory.yml"
+    job_type: "run"
+    organization: "user"
+    inventory: "platform-inventory"
+    project: "run-test"
+    credentials:
+      - "test-host-credential"
+    state: present
+...
