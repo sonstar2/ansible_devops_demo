@@ -8,7 +8,7 @@
     - infra.ee_utilities
   vars:
     ee_builder_dir_clean: false
-    ee_builder_dir: "."
+    ee_builder_dir: "/tmp/"
     ee_base_registry_username: rh-ee-dwaters
     ee_base_registry_password: "{{ registrypwd }}"
     ee_base_image: registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest
