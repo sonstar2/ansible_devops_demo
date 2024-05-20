@@ -1,0 +1,146 @@
+---
+- name: Perform a set of OpenShift API calls
+  block:
+
+    - name: Log in to the OpenShift API
+      redhat.openshift.openshift_auth:
+        host: "{{ ocp_host }}"
+        username: "{{ ocp_username }}"
+        password: "{{ ocp_password }}"
+        validate_certs: false
+        state: present
+      register: openshift_auth_results
+
+    # - name: Show me the api key
+    #   ansible.builtin.debug:
+    #     var: openshift_auth_results
+
+    - name: Create amqstreams namespace in OpenShift
+      redhat.openshift.k8s:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+        name: amqstreams
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Create operator group for AMQ Streams Operator
+      redhat.openshift.k8s:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+        api_version: operators.coreos.com/v1
+        kind: OperatorGroup
+        resource_definition:
+          metadata:
+            name: amqstreams-operator
+            namespace: amqstreams
+          spec:
+            targetNamespaces:
+              - amqstreams
+        state: present
+
+    - name: Install AMQ Streams Operator
+      redhat.openshift.k8s:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+        api_version: operators.coreos.com/v1alpha1
+        kind: Subscription
+        resource_definition:
+          metadata:
+            name: amq-streams
+            namespace: aap
+          spec:
+            channel: 'stable'
+            installPlanApproval: Automatic
+            name: amq-streams-operator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+        state: present
+
+    - name: Wait for the operator to be available
+      kubernetes.core.k8s_info:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+        kind: Subscription
+        namespace: amqstreams
+        name: 'amq-streams'
+        api_version: 'operators.coreos.com/v1alpha1'
+      register: operatordetails
+      until: "operatordetails.resources | length > 0"
+      retries: 10
+      delay: 30
+
+    - name: Debug the operator details
+      ansible.builtin.debug:
+        var: operatordetails
+
+    - name: Install Kafka
+      redhat.openshift.k8s:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+        api_version: kafka.strimzi.io/v1beta2
+        kind: Kafka
+        resource_definition:
+          metadata:
+            name: acs-demo-kafka
+            namespace: amqstreams
+        state: present
+      retries: 10
+      delay: 30
+
+    - name: Get Kafka URL (when Kafka Instance is available)
+      kubernetes.core.k8s_info:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+        api_version: v1
+        kind: Service
+        namespace: amqstreams
+        name: acs-demo-kafka-kafka-bootstrap
+      register: kafka_bootstrap
+      until: "kafka_bootstrap.resources | length > 0"
+      retries: 10
+      delay: 30
+
+    - name: Debug service
+      ansible.builtin.debug:
+        var: kafka_bootstrap.resources
+
+    - name: Debug Kafka endpoint
+      ansible.builtin.debug:
+        var: kafka_bootstrap.resources[0].spec.clusterIP
+
+    - name: Debug Kafka endpoint pt2
+      ansible.builtin.debug:
+        var: kafka_bootstrap.resources[0].spec.ports[1].port
+
+    - name: Create a Kafka Topic
+      redhat.openshift.k8s:
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+        api_version: kafka.strimzi.io/v1beta2
+        kind: KafkaTopic
+        resource_definition:
+          metadata:
+            name: "{{ item}}"
+            namespace: amqstreams
+        state: present
+      loop: "{{ kafka_topic_list }}"
+      retries: 10
+      delay: 30
+
+  always:
+    - name: If login succeeds, revoke the API key
+      when: openshift_auth_results.openshift_auth.api_key is defined
+      redhat.openshift.openshift_auth:
+        state: absent
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        host: "{{ ocp_host }}"
+        validate_certs: false
+      ignore_errors: true
