@@ -22,6 +22,6 @@
       actions:
         - run_job_template:
             name: "{{ aapjobtemplatename }}"
-            organization: Default
+            organization: midrange
             extra_vars:
               trigger_type: event_has_meta
