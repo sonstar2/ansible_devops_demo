@@ -51,7 +51,7 @@
         resource_definition:
           metadata:
             name: amq-streams
-            namespace: aap
+            namespace: amqstreams
           spec:
             channel: 'stable'
             installPlanApproval: Automatic
@@ -88,7 +88,7 @@
         resource_definition:
           metadata:
             name: acs-demo-kafka
-            namespace: amqstreams
+            namespace: {{ kafka_namespace }}
         state: present
       retries: 10
       delay: 30
@@ -100,7 +100,7 @@
         validate_certs: false
         api_version: v1
         kind: Service
-        namespace: amqstreams
+        namespace: {{ kafka_namespace }}
         name: acs-demo-kafka-kafka-bootstrap
       register: kafka_bootstrap
       until: "kafka_bootstrap.resources | length > 0"
@@ -119,7 +119,12 @@
       ansible.builtin.debug:
         var: kafka_bootstrap.resources[0].spec.ports[1].port
 
-    - name: Create a Kafka Topic
+    - name: Set Kafka hostname and port variable
+      ansible.builtin.set_fact:
+        kafkahostname: kafka_bootstrap.resources[0].spec.hostname
+        kafkaport: kafka_boostrap.resources[0].spec.ports[1].port # This is the unsecured http port
+
+    - name: Create Kafka Topics
       redhat.openshift.k8s:
         api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
         host: "{{ ocp_host }}"
@@ -128,8 +133,8 @@
         kind: KafkaTopic
         resource_definition:
           metadata:
-            name: "{{ item}}"
-            namespace: amqstreams
+            name: "{{ item }}"
+            namespace: {{ kafka_namespace }}
         state: present
       loop: "{{ kafka_topic_list }}"
       retries: 10

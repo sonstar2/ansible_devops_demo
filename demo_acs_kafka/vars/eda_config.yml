@@ -15,10 +15,10 @@ eda_rulebook_activations:
     decision_environment: acs_kafka_demo_de
     awx_token: "aap_token"
     extra_vars:
-      kafkatopic: "{{ kafkatopic }}"
+      kafkatopic: "{{ kafkatopic | default('eda-topic') }}"
       kafkahostname: "{{ kafkahostname }}"
-      kafkaport: "{{ kafkaport }}"
-      kafkagroupid: "{{ kafkagroupid }}"
+      kafkaport: "{{ kafkaport | default(9092) }}"
+      kafkagroupid: "{{ kafkagroupid | default('eda_group') }}"
       aapjobtemplatename: "acs-kafka-remediate"
     restart_policy: always
     is_enabled: True

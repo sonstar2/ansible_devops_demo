@@ -27,9 +27,21 @@
         controller_username: "{{ controller_username }}"
         controller_password: "{{ controller_password }}"
 
-    - name: Load the demo definition files
+    - name: Load the Kafka demo definition files
+      ansible.builtin.include_vars:
+        dir: "../{{ demo_name | default('demo_devops') }}/vars/"
+        files_matching: "kafka_config.yml"
+
+    - name: Install Kafka if required
+      ansible.builtin.include_role:
+        name: "install_kafka"
+      when: kafka_namespace is defined and kafka_topic_list is defined
+
+    - name: Load the other demo definition files
       ansible.builtin.include_vars:
         dir: "../{{ demo_name | default('demo_devops') }}/vars"
+        ignore_files:
+          - "kafka_config.yml"
         extensions:
           - 'yml'
 

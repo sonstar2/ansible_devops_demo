@@ -1,0 +1,5 @@
+---
+kafka_namespace: amqstreams
+kafka_topic_list:
+  - "acs-topic"
+  - "eda-topic"
