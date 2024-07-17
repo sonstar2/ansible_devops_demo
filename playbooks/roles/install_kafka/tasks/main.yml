@@ -51,11 +51,11 @@
         resource_definition:
           metadata:
             name: amq-streams
-            namespace: amqstreams
+            namespace: openshift-operators
           spec:
             channel: 'stable'
             installPlanApproval: Automatic
-            name: amq-streams-operator
+            name: amq-streams
             source: redhat-operators
             sourceNamespace: openshift-marketplace
         state: present
@@ -66,7 +66,7 @@
         host: "{{ ocp_host }}"
         validate_certs: false
         kind: Subscription
-        namespace: amqstreams
+        namespace: openshift-operators
         name: 'amq-streams'
         api_version: 'operators.coreos.com/v1alpha1'
       register: operatordetails
@@ -88,7 +88,35 @@
         resource_definition:
           metadata:
             name: acs-demo-kafka
-            namespace: {{ kafka_namespace }}
+            namespace: "{{ kafka_namespace }}"
+          spec:
+            kafka:
+              config:
+                offsets.topic.replication.factor: 3
+                transaction.state.log.replication.factor: 3
+                transaction.state.log.min.isr: 2
+                default.replication.factor: 3
+                min.insync.replicas: 2
+                inter.broker.protocol.version: '3.7'
+              storage:
+                type: ephemeral
+              listeners:
+                - name: plain
+                  port: 9092
+                  type: internal
+                  tls: false
+                - name: tls
+                  port: 9093
+                  type: internal
+                  tls: true
+              replicas: 3
+            entityOperator:
+              topicOperator: {}
+              userOperator: {}
+            zookeeper:
+              storage:
+                type: ephemeral
+              replicas: 3
         state: present
       retries: 10
       delay: 30
@@ -100,7 +128,7 @@
         validate_certs: false
         api_version: v1
         kind: Service
-        namespace: {{ kafka_namespace }}
+        namespace: "{{ kafka_namespace }}"
         name: acs-demo-kafka-kafka-bootstrap
       register: kafka_bootstrap
       until: "kafka_bootstrap.resources | length > 0"
@@ -134,7 +162,7 @@
         resource_definition:
           metadata:
             name: "{{ item }}"
-            namespace: {{ kafka_namespace }}
+            namespace: "{{ kafka_namespace }}"
         state: present
       loop: "{{ kafka_topic_list }}"
       retries: 10
