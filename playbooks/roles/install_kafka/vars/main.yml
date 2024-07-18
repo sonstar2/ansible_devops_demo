@@ -3,6 +3,8 @@
 ocp_host: openshift.localdomain
 ocp_username: admin
 ocp_password: password
+kafka_namespace: "amqstreams"
+kafka_instance_name: "kafka-demo"
 kafka_topic_list:
-  - "acs-topic"
-  - "eda-topic"
+  - "topic1"
+  - "topic2"

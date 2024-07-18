@@ -87,7 +87,7 @@
         kind: Kafka
         resource_definition:
           metadata:
-            name: acs-demo-kafka
+            name: "{{ kafka_instance_name }}"
             namespace: "{{ kafka_namespace }}"
           spec:
             kafka:
@@ -129,7 +129,7 @@
         api_version: v1
         kind: Service
         namespace: "{{ kafka_namespace }}"
-        name: acs-demo-kafka-kafka-bootstrap
+        name: "{{ kafka_instance_name }}-kafka-bootstrap"
       register: kafka_bootstrap
       until: "kafka_bootstrap.resources | length > 0"
       retries: 10
