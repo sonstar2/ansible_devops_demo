@@ -150,7 +150,7 @@
     - name: Set Kafka hostname and port variable
       ansible.builtin.set_fact:
         kafkahostname: "acs-demo-kafka-kafka-bootstrap.{{ kafka_namespace }}.svc.cluster.local"
-        kafkaport: "{{ kafka_boostrap.resources[0].spec.ports[1].port }}" # This is the unsecured http port
+        kafkaport: "{{ kafka_bootstrap.resources[0].spec.ports[1].port }}" # This is the unsecured http port
 
     - name: Create Kafka Topics
       redhat.openshift.k8s:
