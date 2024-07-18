@@ -1,0 +1,89 @@
+---
+- name: Install AAP and EDA on an existing OCP Cluster
+  vars:
+    aap_ocp_install_connection:
+      host: "{{ ocp_host }}"
+      username: "{{ ocp_username }}"
+      password: "{{ ocp_password }}"
+      verify_ssl: false
+      validate_certs: false
+    aap_ocp_install_namespace: aap
+    aap_ocp_install_operator:
+      channel: "stable-2.4"
+    aap_ocp_install_controller:
+      instance_name: demo-aap
+      replicas: 1
+      link_text: "Ansible Automation Platform"
+    aap_ocp_install_eda:
+      instance_name: demo-eda
+      replicas: 1
+      link_text: "Ansible Automation Platform EDA"
+
+  block:
+    - name: Install AAP and EDA
+      ansible.builtin.include_role:
+        name: "infra.aap_utilities.aap_ocp_install"
+
+    - name: Get OpenShift API token (again)
+      # Disabling check for FQCN on module names as using either community.okd or redhat.openshift collection is able to be used
+      redhat.openshift.openshift_auth:  # noqa fqcn[action]
+        host: "{{ aap_ocp_install_connection['host'] | mandatory }}"
+        username: "{{ aap_ocp_install_connection['username'] | mandatory }}"
+        password: "{{ aap_ocp_install_connection['password'] | mandatory }}"
+        validate_certs: "{{ aap_ocp_install_connection['validate_certs'] | default(omit) }}"
+      register: __aap_ocp_install_auth_results
+      when: aap_ocp_install_connection['api_key'] is not defined
+
+    - name: Set authentication for provided API key
+      ansible.builtin.set_fact:
+        __aap_ocp_install_auth_results:
+          openshift_auth:
+            host: "{{ aap_ocp_install_connection['host'] | mandatory }}"
+            api_key: "{{ aap_ocp_install_connection['api_key'] | mandatory }}"
+            validate_certs: "{{ aap_ocp_install_connection['validate_certs'] | default(omit) }}"
+      when: aap_ocp_install_connection['api_key'] is defined
+
+    - name: Get AAP admin password
+      kubernetes.core.k8s_info:
+        host: "{{ __aap_ocp_install_auth_results['openshift_auth']['host'] }}"
+        api_key: "{{ __aap_ocp_install_auth_results['openshift_auth']['api_key'] }}"
+        validate_certs: "{{ aap_ocp_install_connection['validate_certs'] | default(omit) }}"
+        api_version: v1
+        kind: Secret
+        namespace: aap
+        name: demo-aap-admin-password
+      register: aap_admin_pwd
+
+    - name: Get EDA admin password (when EDA is available)
+      kubernetes.core.k8s_info:
+        host: "{{ __aap_ocp_install_auth_results['openshift_auth']['host'] }}"
+        api_key: "{{ __aap_ocp_install_auth_results['openshift_auth']['api_key'] }}"
+        validate_certs: "{{ aap_ocp_install_connection['validate_certs'] | default(omit) }}"
+        api_version: v1
+        kind: Secret
+        namespace: aap
+        name: demo-eda-admin-password
+      register: eda_admin_pwd
+      until: "eda_admin_pwd.resources | length > 0"
+      retries: 10
+      delay: 30
+
+    - name: "If login succeeded revoke OpenShift API token (again)"
+      when: __aap_ocp_install_auth_results['openshift_auth']['api_key'] is defined and aap_ocp_install_connection['api_key'] is not defined
+      # Disabling check for FQCN on module names as using either community.okd or redhat.openshift collection is able to be used
+      redhat.openshift.openshift_auth:  # noqa fqcn[action]
+        host: "{{ aap_ocp_install_connection['host'] | mandatory }}"
+        validate_certs: "{{ aap_ocp_install_connection['validate_certs'] | default(omit) }}"
+        state: absent
+        api_key: "{{ __aap_ocp_install_auth_results['openshift_auth']['api_key'] }}"
+      changed_when: false
+
+    # Set facts for the deploy_demo role
+    - name: Set facts for demo deployment
+      ansible.builtin.set_fact:
+        controller_hostname: "{{ __aap_ocp_install_controller_route }}"
+        controller_username: "admin"
+        controller_password: "{{ aap_admin_pwd.resources[0].data.password | b64decode }}"
+        eda_host: "{{ __aap_ocp_install_eda_route }}"
+        eda_username: "admin"
+        eda_password: "{{ eda_admin_pwd.resources[0].data.password | b64decode }}"

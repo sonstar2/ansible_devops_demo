@@ -6,7 +6,7 @@
 
     - name: Install AAP and EDA
       ansible.builtin.include_role:
-        name: "install_aap_and_eda"
+        name: "install_aap_and_eda_on_ocp"
 
     # Details on how to get a subscription manifest to license AAP can be found here:
     # https://docs.ansible.com/automation-controller/4.4/html/userguide/import_license.html#obtain-sub-manifest
@@ -36,6 +36,16 @@
       ansible.builtin.include_role:
         name: "install_kafka"
       when: kafka_namespace is defined and kafka_topic_list is defined
+
+    - name: Load the Developer Hub demo definition files
+      ansible.builtin.include_vars:
+        dir: "../{{ demo_name | default('demo_devops') }}/vars/"
+        files_matching: "rhdh_config.yml"
+
+    - name: Install Developer Hub if required
+      ansible.builtin.include_role:
+        name: "install_rhdh"
+      when: rhdh_namespace is defined
 
     - name: Load the other demo definition files
       ansible.builtin.include_vars:

@@ -70,7 +70,7 @@
         name: 'amq-streams'
         api_version: 'operators.coreos.com/v1alpha1'
       register: operatordetails
-      until: "operatordetails.resources | length > 0"
+      until: (operatordetails['resources'][0]['status']['state'] is defined) and (operatordetails['resources'][0]['status']['state'] == 'AtLatestKnown')
       retries: 10
       delay: 30
 
