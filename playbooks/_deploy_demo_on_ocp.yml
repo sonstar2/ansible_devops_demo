@@ -66,3 +66,13 @@
     - name: Display admin password for EDA
       ansible.builtin.debug:
         msg: "EDA Host is: {{ eda_host }} and EDA Admin password is: '{{ eda_password }}'"
+
+    - name: Display details for Kafka
+      ansible.builtin.debug:
+        msg: "Kafka Bootstrap Host is: {{ kafkahostname }}:{{ kafkaport }}"
+      when: kafkahostname is defined
+
+    - name: Display details for RHDH
+      ansible.builtin.debug:
+        msg: "Developer Hub Host is: {{ rhdh_hostname }}"
+      when: rhdh_hostname is defined 

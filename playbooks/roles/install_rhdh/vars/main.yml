@@ -1,0 +1,7 @@
+---
+# OCP Connection Information
+ocp_host: openshift.localdomain
+ocp_username: admin
+ocp_password: password
+rhdh_namespace: "devhub"
+rhdh_instance_name: "developer-hub"
