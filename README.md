@@ -3,7 +3,7 @@ DevOps Automation with Event-Driven Ansible Demo
 
 To deploy:
 
-1) On RHDP create a new "AWS with OpenShift Open Environment":
+1) On RHDP create a new "AWS with OpenShift Open Environment" using m6a.2xlarge instances:
 
 https://demo.redhat.com/catalog?category=Open_Environments&item=babylon-catalog-prod%2Fsandboxes-gpte.sandbox-ocp.prod
 
