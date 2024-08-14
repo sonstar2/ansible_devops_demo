@@ -14,7 +14,7 @@
         verify_mode: CERT_OPTIONAL
   rules:
     - name: Register and patch new VM
-      condition: event.body.event_type is defined and event.body.event_type = "vm_create" # TODO: Find out what this is
+      condition: event.body.event_type is defined and event.body.event_type == "vm_create" # TODO: Find out what this is
       actions:
         - run_workflow_template:
             name: "add-vm-and-patch"
