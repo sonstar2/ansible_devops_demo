@@ -1,0 +1,28 @@
+---
+- name: Run a defined job template for creation of new OCPVirt VMs
+  hosts: all
+  sources:
+    - name: Listen to Kafka server broker
+      ansible.eda.kafka:
+        topic: "{{ kafkatopic }}"
+        host: "{{ kafkahostname }}"
+        port: "{{ kafkaport }}"
+        group_id: "{{ kafkagroupid }}"
+        # Note that the following lines are insecure and should
+        # not be used in a production environment
+        check_hostname: false
+        verify_mode: CERT_OPTIONAL
+  rules:
+    - name: Register and patch new VM
+      condition: event.body.event_type is defined and event.body.event_type = "vm_create" # TODO: Find out what this is
+      actions:
+        - run_workflow_template:
+            name: "add-vm-and-patch"
+            organization: "virtualization"
+            extra_vars:
+              hostname: event.body.hostname # TODO: Find out what this is
+    - name: Fallthrough
+      condition: event.meta is defined
+      actions:
+        - debug:
+            var: event

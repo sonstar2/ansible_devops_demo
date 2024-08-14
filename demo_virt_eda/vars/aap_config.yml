@@ -1,0 +1,73 @@
+---
+controller_organizations:
+  - name: "virtualization"
+    description: "Virtualization Team"
+    state: present
+    galaxy_credentials:
+      - ah_published
+      - ah_certified
+      - ah_community
+
+controller_inventories:
+  - name: "ocpvirt-vms"
+    description: "OpenShift Virtualization Virtual Machines"
+    organization: "virtualization"
+    state: present
+
+controller_projects:
+  - name: "ocpvirt-project"
+    description: "Virtualization Demo"
+    organization: "virtualization"
+    scm_type: git
+    scm_url: "https://github.com/derekwaters/ansible_devops_demo.git"
+    scm_branch: main
+    scm_clean: true
+    scm_update_on_launch: true
+    update_project: true
+    wait: true
+    state: present
+
+controller_templates:
+  - name: "patch-vms"
+    playbook: "patch-vms.yml"
+    job_type: "run"
+    organization: "virtualization"
+    inventory: "ocpvirt-vms"
+    project: "ocpvirt-project"
+    ask_variables_on_launch: true
+    credentials:
+      - "Demo Credential"
+    state: present
+  - name: "add-vm-to-inventory"
+    playbook: "add-vm-to-inventory.yml"
+    job_type: "run"
+    organization: "virtualization"
+    inventory: "Demo Inventory"
+    project: "ocpvirt-vms"
+    ask_variables_on_launch: true
+    credentials:
+      - "Demo Credential"
+    state: present
+
+controller_workflows:
+  - name: "add-vm-and-patch"
+    description: "Add a new OCPVirt VM to the inventory and apply patches"
+    organization: "virtualization"
+    inventory: "Demo Inventory"
+    state: present
+    simplified_workflow_nodes:
+      - identifier: add-vm
+        unified_job_template: "add-vm-to-inventory"
+        success_nodes:
+          - "patch-vms"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+
+      - identifier: patch-vms
+        unified_job_template: "patch-vms"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+...

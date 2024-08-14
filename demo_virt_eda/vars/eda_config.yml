@@ -1,0 +1,28 @@
+---
+eda_projects:
+  - name: virt-eda-demo
+    description: OCPVirt EDA Demo
+    url: https://github.com/derekwaters/ansible_devops_demo
+eda_decision_environments:
+  - name: virt-eda-demo-de
+    description: OCPVirt EDA Demo
+    image_url: "registry.redhat.io/ansible-automation-platform-24/de-supported-rhel8"
+eda_rulebook_activations:
+  - name: virt-eda-demo-activation
+    description: OCPVirt EDA Demo
+    project: virt-eda-demo
+    rulebook: ocpvirt-new-vm.yml
+    decision_environment: virt-eda-demo-de
+    awx_token: "aap_token"
+    extra_vars:
+      kafkatopic: "{{ kafkatopic | default('eda-topic') }}"
+      kafkahostname: "{{ kafkahostname }}"
+      kafkaport: "{{ kafkaport | default(9092) }}"
+      kafkagroupid: "{{ kafkagroupid | default('eda_group') }}"
+    restart_policy: always
+    is_enabled: True
+    state: present
+eda_user_tokens:
+  - name: aap_token
+    description: Default AAP Access Token
+    token: "{{ awx_token }}"
