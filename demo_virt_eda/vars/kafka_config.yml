@@ -1,6 +1,6 @@
 ---
 kafka_namespace: amqstreams
-kafka_instance_name: "acs-demo-kafka"
+kafka_instance_name: "ocpvirt-eda-demo"
 kafka_topic_list:
-  - "acs-topic"
+  - "ocpvirt-topic"
   - "eda-topic"
