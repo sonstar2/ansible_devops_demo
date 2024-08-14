@@ -29,7 +29,7 @@ controller_projects:
 
 controller_templates:
   - name: "patch-vms"
-    playbook: "patch-vms.yml"
+    playbook: "demo_virt_eda/playbooks/patch-vms.yml"
     job_type: "run"
     organization: "virtualization"
     inventory: "ocpvirt-vms"
@@ -39,11 +39,11 @@ controller_templates:
       - "Demo Credential"
     state: present
   - name: "add-vm-to-inventory"
-    playbook: "add-vm-to-inventory.yml"
+    playbook: "demo_virt_eda/playbooks/add-vm-to-inventory.yml"
     job_type: "run"
     organization: "virtualization"
     inventory: "Demo Inventory"
-    project: "ocpvirt-vms"
+    project: "ocpvirt-project"
     ask_variables_on_launch: true
     credentials:
       - "Demo Credential"
