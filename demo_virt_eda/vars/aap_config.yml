@@ -53,6 +53,10 @@ controller_templates:
     project: "ocpvirt-project"
     execution_environment: "infra-ee"
     ask_variables_on_launch: true
+    extra_vars:
+      controller_hostname: "{{ controller_hostname }}"
+      controller_username: "{{ controller_username }}"
+      controller_password: "{{ controller_password }}"
     credentials:
       - "Demo Credential"
     state: present
