@@ -3,6 +3,7 @@
   hosts: localhost
   connection: local
   vars:
+    hostname: "{{ ansible_eda.event.body.hostname }}"
     controller_hosts:
       - name: "{{ hostname }}"
         description: "OCPVirt VM {{ hostname }}"

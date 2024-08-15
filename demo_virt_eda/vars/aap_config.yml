@@ -67,6 +67,7 @@ controller_workflows:
     organization: "virtualization"
     inventory: "Demo Inventory"
     state: present
+    ask_variables_on_launch: true
     simplified_workflow_nodes:
       - identifier: add-vm
         unified_job_template: "add-vm-to-inventory"
