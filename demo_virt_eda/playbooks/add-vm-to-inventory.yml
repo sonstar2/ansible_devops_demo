@@ -11,7 +11,5 @@
       enabled: true
   collections:
     - ansible.ansible
-  tasks:  
-    - name: Add a new VM identified by 'hostname' to the 'ocpvirt-vms' inventory
-      ansible.builtin.include_role:
-        name: infra.controller_configuration
+  roles:
+    - {role: infra.controller_configuration.hosts, when: controller_hosts is defined}
