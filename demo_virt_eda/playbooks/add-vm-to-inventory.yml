@@ -1,6 +1,6 @@
 ---
 - name: Add a newly created OpenShift Virtualization virtual machine to an AAP Inventory
-  hosts: localhost
+  hosts: all
   gather_facts: false
   vars:
     controller_hosts:
