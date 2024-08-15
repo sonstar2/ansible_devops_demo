@@ -41,7 +41,6 @@ controller_templates:
     organization: "virtualization"
     inventory: "ocpvirt-vms"
     project: "ocpvirt-project"
-    execution_environment: "infra-ee"
     ask_variables_on_launch: true
     credentials:
       - "Demo Credential"
@@ -52,6 +51,7 @@ controller_templates:
     organization: "virtualization"
     inventory: "Demo Inventory"
     project: "ocpvirt-project"
+    execution_environment: "infra-ee"
     ask_variables_on_launch: true
     credentials:
       - "Demo Credential"

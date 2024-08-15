@@ -1,0 +1,10 @@
+# FROM: https://developers.redhat.com/articles/2023/11/03/how-build-multi-architecture-container-images?source=sso#podman
+
+# First, initialise the manifest
+podman manifest create <image_name:tag>
+
+# Build the image attaching them to the manifest
+podman build --platform linux/amd64,linux/arm64  --manifest <image_name:tag>  .
+
+# Finally publish the manifest
+podman manifest push <image_name:tag>
