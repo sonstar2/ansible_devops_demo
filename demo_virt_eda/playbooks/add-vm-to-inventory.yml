@@ -1,14 +1,14 @@
 ---
 - name: Add a newly created OpenShift Virtualization virtual machine to an AAP Inventory
-  hosts: all
-  gather_facts: false
+  hosts: localhost
+  connection: local
   vars:
     controller_hosts:
-      name: "{{ hostname }}"
-      description: "OCPVirt VM {{ hostname }}"
-      inventory: "ocpvirt-vms"
-      state: present
-      enabled: true
+      - name: "{{ hostname }}"
+        description: "OCPVirt VM {{ hostname }}"
+        inventory: "ocpvirt-vms"
+        state: present
+        enabled: true
   collections:
     - ansible.controller
     - infra.controller_configuration
