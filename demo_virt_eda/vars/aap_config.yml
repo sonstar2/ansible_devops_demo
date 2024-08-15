@@ -14,6 +14,13 @@ controller_inventories:
     organization: "virtualization"
     state: present
 
+controller_execution_environments:
+  - name: "infra-ee"
+    description: "Execution Environment including infra collections"
+    organization: "virtualization"
+    image: "quay.io/rh-ee-dwaters/infra-ee"
+    state: present
+
 controller_projects:
   - name: "ocpvirt-project"
     description: "Virtualization Demo"
@@ -34,6 +41,7 @@ controller_templates:
     organization: "virtualization"
     inventory: "ocpvirt-vms"
     project: "ocpvirt-project"
+    execution_environment: "infra-ee"
     ask_variables_on_launch: true
     credentials:
       - "Demo Credential"

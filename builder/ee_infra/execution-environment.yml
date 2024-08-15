@@ -1,0 +1,22 @@
+# NOTE: This will not work with ansible-builder 3.1.0+
+# Because the sanitise step is not performed, which causes issues with
+# older versions of PIP, such as that included in the aap24/ee-supported image
+#
+version: 3
+
+images:
+  base_image:
+    name: "registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel8:latest"
+
+dependencies:
+  galaxy:
+    collections:
+      - infra.controller_configuration
+      - infra.eda_configuration
+      - infra.ah_configuration
+      - infra.ee_utilities
+      - infra.aap_utilities
+
+options:
+  package_manager_path: /usr/bin/microdnf
+
