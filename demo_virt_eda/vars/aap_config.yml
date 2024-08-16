@@ -87,6 +87,10 @@ controller_templates:
     project: "ocpvirt-project"
     execution_environment: "infra-ee"
     ask_variables_on_launch: true
+    extra_vars:
+      controller_hostname: "{{ controller_hostname }}"
+      controller_username: "{{ controller_username }}"
+      controller_password: "{{ controller_password }}"
     credentials:
       - "Demo Credential"
     state: present
@@ -97,6 +101,7 @@ controller_workflows:
     organization: "virtualization"
     inventory: "Demo Inventory"
     state: present
+    ask_variables_on_launch: true
     simplified_workflow_nodes:
       - identifier: add-vm
         unified_job_template: "add-vm-to-inventory"
