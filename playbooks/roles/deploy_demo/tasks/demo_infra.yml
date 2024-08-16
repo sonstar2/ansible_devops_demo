@@ -41,6 +41,11 @@
     name: infra.controller_configuration.inventories
   when: controller_inventories is defined
 
+- name: Include inventory sources role
+  ansible.builtin.include_role:
+    name: infra.controller_configuration.inventory_sources
+  when: controller_inventory_sources is defined
+
 - name: Include hosts role
   ansible.builtin.include_role:
     name: infra.controller_configuration.hosts

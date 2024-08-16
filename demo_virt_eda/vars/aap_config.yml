@@ -8,18 +8,17 @@ controller_organizations:
       - ah_certified
       - ah_community
 
-controller_inventories:
-  - name: "ocpvirt-vms"
-    description: "OpenShift Virtualization Virtual Machines"
+controller_credentials:
+  - name: "ocp-api-token"
+    description: "OpenShift API Bearer Token"
     organization: "virtualization"
-    state: present
+    credential_type: "OpenShift or Kubernetes API Bearer Token"
+    inputs:
+      host: "https://api.cluster-4xfvg.4xfvg.sandbox2034.opentlc.com:6443"
+      verify_ssl: false
+      bearer_token: "TODO"
 
-controller_execution_environments:
-  - name: "infra-ee"
-    description: "Execution Environment including infra collections"
-    organization: "virtualization"
-    image: "quay.io/rh-ee-dwaters/infra-ee"
-    state: present
+# type might be kubernetes_bearer_token
 
 controller_projects:
   - name: "ocpvirt-project"
@@ -32,6 +31,41 @@ controller_projects:
     scm_update_on_launch: true
     update_project: true
     wait: true
+    state: present
+  - name: "ocpvirt-inventory"
+    description: "OpenShift Virtualization Inventory Source"
+    organization: "virtualization"
+    scm_type: git
+    scm_url: "https://github.com/derekwaters/ansible_inventory_sources.git"
+    scm_branch: main
+    scm_clean: true
+    scm_update_on_launch: true
+    update_project: true
+    wait: true
+    state: present
+
+controller_inventories:
+  - name: "ocpvirt-vms"
+    description: "OpenShift Virtualization Virtual Machines"
+    organization: "virtualization"
+    state: present
+
+controller_inventory_sources:
+  - name: "ocpvirt-vms-source"
+    source: "scm"
+    inventory: "ocpvirt-vms"
+    organization: "virtualization"
+    source_project: "ocpvirt-inventory"
+    credential: "ocp-api-token"
+    verbosity: 2
+    overwrite: true
+    state: present
+
+controller_execution_environments:
+  - name: "infra-ee"
+    description: "Execution Environment including infra collections"
+    organization: "virtualization"
+    image: "quay.io/rh-ee-dwaters/infra-ee"
     state: present
 
 controller_templates:
@@ -59,7 +93,7 @@ controller_templates:
 
 controller_workflows:
   - name: "add-vm-and-patch"
-    description: "Add a new OCPVirt VM to the inventory and apply patches"
+    description: "Add a new OCPVirt VM to the CMDB inventory and apply patches"
     organization: "virtualization"
     inventory: "Demo Inventory"
     state: present
