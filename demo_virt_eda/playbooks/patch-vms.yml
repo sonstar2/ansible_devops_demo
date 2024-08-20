@@ -7,5 +7,5 @@
       ansible.builtin.package:
         name: "*"
         state: latest
-    - name: Reboot all servers
-      ansible.builtin.reboot:
+#    - name: Reboot all servers
+#      ansible.builtin.reboot:
