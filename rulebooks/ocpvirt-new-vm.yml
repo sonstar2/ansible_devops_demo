@@ -14,7 +14,7 @@
         verify_mode: CERT_OPTIONAL
   rules:
     - name: Register and patch new VM
-      condition: event.body.namespace is defined and event.body.namedspace == "{{ vmnamespace }}" and event.body.msg is defined and event.body.msg = "Synced vmi"
+      condition: event.body.namespace is defined and event.body.namedspace == "{{ vmnamespace }}" and event.body.msg is defined and event.body.msg == "Synced vmi"
       actions:
         - run_workflow_template:
             name: "add-vm-and-patch"
