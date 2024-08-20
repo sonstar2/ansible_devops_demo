@@ -22,46 +22,6 @@
             extra_vars:
               hostname: event.body.name
 
-    - name: Check Condition 0.5
-      condition: event.body.kubernetes.namespace_name == vmnamespace and event.body.structured.msg is search("Found PID for", ignorecase=true)
-      actions:
-        - debug:
-            msg: "Awwww, yeah, baby"
-
-    - name: Check Condition 0.6
-      condition: event.body.kubernetes.namespace_name == vmnamespace
-      actions:
-        - debug:
-            msg: "Parlay voo onglays?"
-
-    - name: Check Condition 0.7
-      condition: event.body.kubernetes.namespace_name == vars.vmnamespace
-      actions:
-        - debug:
-            msg: "Non, juh swee fronsays!"
-
-    - name: Check Condition 1
-      condition: event.body.kubernetes.namespace_name is defined and event.body.kubernetes.namespace_name == vars.vmnamespace and event.body.structured.msg is defined 
-      actions:
-        - debug:
-            var: vmnamespace
-
-    - name: Check Condition 2
-      condition: event.body.kubernetes.namespace_name is defined and event.body.kubernetes.namespace_name == vars.vmnamespace 
-      actions:
-        - debug:
-            msg: "Got here!"
-
-    - name: Check Condition 3
-      condition: event.body.kubernetes.namespace_name is defined 
-      actions:
-        - debug:
-            msg: "Got here again!"
-        - debug:
-            var: vmnamespace
-        - debug:
-            var: event.body.kubernetes.namespace_name
-
     - name: Fallthrough
       condition: event.meta is defined
       actions:
