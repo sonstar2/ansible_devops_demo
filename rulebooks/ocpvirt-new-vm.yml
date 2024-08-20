@@ -17,7 +17,7 @@
       condition: 
         all:
           - event.body.kubernetes.namespace_name is defined 
-          - event.body.kubernetes.namespace_name == vmnamespace 
+          - event.body.kubernetes.namespace_name == vars.vmnamespace 
           - event.body.structured.msg is defined 
           - event.body.structured.msg is search("Found PID for", ignorecase=true)
       actions:
@@ -31,7 +31,7 @@
       condition: 
         all:
           - event.body.kubernetes.namespace_name is defined 
-          - event.body.kubernetes.namespace_name == vmnamespace 
+          - event.body.kubernetes.namespace_name == vars.vmnamespace 
           - event.body.structured.msg is defined 
       actions:
         - debug:
@@ -41,7 +41,7 @@
       condition: 
         all:
           - event.body.kubernetes.namespace_name is defined 
-          - event.body.kubernetes.namespace_name == vmnamespace 
+          - event.body.kubernetes.namespace_name == vars.vmnamespace 
       actions:
         - debug:
             msg: "Got here!"
