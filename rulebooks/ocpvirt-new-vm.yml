@@ -55,6 +55,8 @@
             msg: "Got here again!"
         - debug:
             var: vmnamespace
+        - debug:
+            var: event.body.kubernetes.namespace_name
 
     - name: Fallthrough
       condition: event.meta is defined
