@@ -14,12 +14,7 @@
         verify_mode: CERT_OPTIONAL
   rules:
     - name: Register and patch new VM
-      condition: 
-        all:
-          - event.body.kubernetes.namespace_name is defined 
-          - event.body.kubernetes.namespace_name == vars.vmnamespace 
-          - event.body.structured.msg is defined 
-          - event.body.structured.msg is search("Found PID for", ignorecase=true)
+      condition: event.body.kubernetes.namespace_name == vars.vmnamespace and event.body.structured.msg is search("Found PID for", ignorecase=true)
       actions:
         - run_workflow_template:
             name: "add-vm-and-patch"
@@ -27,29 +22,26 @@
             extra_vars:
               hostname: event.body.name
 
+    - name: Check Condition 0.5
+      condition: event.body.kubernetes.namespace_name == vmnamespace and event.body.structured.msg is search("Found PID for", ignorecase=true)
+      actions:
+        - debug:
+            msg: "Awwww, yeah, baby"
+
     - name: Check Condition 1
-      condition: 
-        all:
-          - event.body.kubernetes.namespace_name is defined 
-          - event.body.kubernetes.namespace_name == vars.vmnamespace 
-          - event.body.structured.msg is defined 
+      condition: event.body.kubernetes.namespace_name is defined and event.body.kubernetes.namespace_name == vars.vmnamespace and event.body.structured.msg is defined 
       actions:
         - debug:
             var: vmnamespace
 
     - name: Check Condition 2
-      condition: 
-        all:
-          - event.body.kubernetes.namespace_name is defined 
-          - event.body.kubernetes.namespace_name == vars.vmnamespace 
+      condition: event.body.kubernetes.namespace_name is defined and event.body.kubernetes.namespace_name == vars.vmnamespace 
       actions:
         - debug:
             msg: "Got here!"
 
     - name: Check Condition 3
-      condition: 
-        all:
-          - event.body.kubernetes.namespace_name is defined 
+      condition: event.body.kubernetes.namespace_name is defined 
       actions:
         - debug:
             msg: "Got here again!"
