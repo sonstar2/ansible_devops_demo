@@ -14,9 +14,9 @@ controller_credentials:
     organization: "virtualization"
     credential_type: "OpenShift or Kubernetes API Bearer Token"
     inputs:
-      host: "https://api.cluster-4xfvg.4xfvg.sandbox2034.opentlc.com:6443"
+      host: "{{ controller_hostname }}"
       verify_ssl: false
-      bearer_token: "TODO"
+      bearer_token: "{{ controller_token }}"
 
 # type might be kubernetes_bearer_token
 
@@ -79,6 +79,7 @@ controller_templates:
     credentials:
       - "Demo Credential"
     state: present
+
   - name: "add-vm-to-inventory"
     playbook: "demo_virt_eda/playbooks/add-vm-to-inventory.yml"
     job_type: "run"

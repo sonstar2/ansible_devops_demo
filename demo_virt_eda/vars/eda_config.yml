@@ -19,6 +19,7 @@ eda_rulebook_activations:
       kafkahostname: "{{ kafkahostname }}"
       kafkaport: "{{ kafkaport | default(9092) }}"
       kafkagroupid: "{{ kafkagroupid | default('eda_group') }}"
+      vmnamespace: "{{ vmnamespace | default('vms-namespace') }}"
     restart_policy: always
     is_enabled: True
     state: present
