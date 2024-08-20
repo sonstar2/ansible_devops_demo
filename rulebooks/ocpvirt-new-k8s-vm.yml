@@ -7,8 +7,7 @@
         api_version: v1
         kind: VirtualMachine
         host: "{{ ocp_host }}"
-        username: "{{ ocp_username }}"
-        password: "{{ ocp_password }}"
+        api_key: "{{ ocp_apikey }}"
         verify_ssl: False
   rules:
     - name: New VM
