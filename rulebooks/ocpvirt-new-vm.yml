@@ -14,7 +14,12 @@
         verify_mode: CERT_OPTIONAL
   rules:
     - name: Register and patch new VM
-      condition: event.body.namespace is defined and event.body.namedspace == "{{ vmnamespace }}" and event.body.msg is defined and event.body.msg == "Synced vmi"
+      condition: 
+        all:
+          - event.body.kubernetes.namespace_name is defined 
+          - event.body.kubernetes.namespace_name == "{{ vmnamespace }}" 
+          - event.body.structured.msg is defined 
+          - event.body.structured.msg is search("Found PID for", ignorecase=true)
       actions:
         - run_workflow_template:
             name: "add-vm-and-patch"
