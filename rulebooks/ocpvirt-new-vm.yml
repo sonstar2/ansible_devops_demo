@@ -17,7 +17,7 @@
       condition: 
         all:
           - event.body.kubernetes.namespace_name is defined 
-          - event.body.kubernetes.namespace_name == "vm-demo-nab" 
+          - event.body.kubernetes.namespace_name == "{{ vmnamespace }}" 
           - event.body.structured.msg is defined 
           - event.body.structured.msg is search("Found PID for", ignorecase=true)
       actions:
@@ -26,6 +26,34 @@
             organization: "virtualization"
             extra_vars:
               hostname: event.body.name
+
+    - name: Check Condition 1
+      condition: 
+        all:
+          - event.body.kubernetes.namespace_name is defined 
+          - event.body.kubernetes.namespace_name == "{{ vmnamespace }}" 
+          - event.body.structured.msg is defined 
+      actions:
+        - debug:
+            var: vmnamespace
+
+    - name: Check Condition 2
+      condition: 
+        all:
+          - event.body.kubernetes.namespace_name is defined 
+          - event.body.kubernetes.namespace_name == "{{ vmnamespace }}" 
+      actions:
+        - debug:
+            msg: "Got here!"
+
+    - name: Check Condition 3
+      condition: 
+        all:
+          - event.body.kubernetes.namespace_name is defined 
+      actions:
+        - debug:
+            msg: "Got here again!"
+
     - name: Fallthrough
       condition: event.meta is defined
       actions:
