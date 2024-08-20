@@ -17,8 +17,14 @@ controller_credentials:
       host: "{{ ocp_host }}"
       verify_ssl: false
       bearer_token: "{{ ocp_token }}"
-
 # type might be kubernetes_bearer_token
+  - name: "access-virt-vms-cred"
+    description: "Credential to access OpenShift Virtualization VMs via ssh"
+    organization: "virtualization"
+    credential_type: "Machine"
+    inputs:
+      username: "fedora"
+      password: "fedora"
 
 controller_projects:
   - name: "ocpvirt-project"
@@ -77,7 +83,7 @@ controller_templates:
     project: "ocpvirt-project"
     ask_variables_on_launch: true
     credentials:
-      - "Demo Credential"
+      - "access-virt-vms-cred"
     state: present
 
   - name: "add-vm-to-inventory"
