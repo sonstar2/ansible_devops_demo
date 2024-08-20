@@ -14,9 +14,9 @@ controller_credentials:
     organization: "virtualization"
     credential_type: "OpenShift or Kubernetes API Bearer Token"
     inputs:
-      host: "{{ controller_hostname }}"
+      host: "{{ ocp_host }}"
       verify_ssl: false
-      bearer_token: "{{ controller_token }}"
+      bearer_token: "{{ ocp_token }}"
 
 # type might be kubernetes_bearer_token
 
