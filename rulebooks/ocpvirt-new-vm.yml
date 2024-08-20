@@ -53,6 +53,8 @@
       actions:
         - debug:
             msg: "Got here again!"
+        - debug:
+            var: vmnamespace
 
     - name: Fallthrough
       condition: event.meta is defined
