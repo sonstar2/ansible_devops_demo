@@ -22,8 +22,8 @@
             extra_vars:
               hostname: event.body.name
 
-    - name: Fallthrough
-      condition: event.meta is defined
-      actions:
-        - debug:
-            var: event
+#    - name: Fallthrough
+#      condition: event.meta is defined
+#      actions:
+#        - debug:
+#            var: event
