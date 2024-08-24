@@ -16,12 +16,11 @@
         run_job_template:
           organization: "midrange"
           name: "remediate-missing-org"
-    - name: Default debug
-      condition: event.payload is defined
-      actions:
-        - debug:
-            var: event.payload.operation
-        - debug:
-            var: event.payload.object1
-        - debug:
-            var: event.payload.changes
+# NOTE: This is commented out as it results in a lot of debug
+# in your activation log. But it can give you the full details
+# of the event structure being sent
+#    - name: Default debug
+#      condition: event.payload is defined
+#      actions:
+#        - debug:
+#            var: event.payload
