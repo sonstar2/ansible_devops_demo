@@ -11,7 +11,7 @@
       condition: >
         event.payload.operation == "create" and
         event.payload.object1 == "credential" and
-        event.payload.changes.organization is None
+        event.payload.changes.organization == null
       action:
         run_job_template:
           organization: "midrange"
