@@ -16,3 +16,12 @@
         run_job_template:
           organization: "midrange"
           name: "remediate-missing-org"
+    - name: Default debug
+      condition: event.payload is defined
+      action:
+        - debug:
+            var: event.payload.operation
+        - debug:
+            var: event.payload.object1
+        - debug:
+            var: event.payload.changes
