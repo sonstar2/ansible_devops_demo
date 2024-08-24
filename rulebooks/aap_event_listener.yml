@@ -1,0 +1,18 @@
+---
+- name: Listen for events from the AAP activity stream
+  hosts: all
+  sources:
+    - name: Listen to default webhook messages on port 5001
+      ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5001
+  rules:
+    - name: Empty Organization detected
+      condition: >
+        event.payload.operation == "create" and
+        event.payload.object1 == "credential" and
+        event.payload.changes.organization == None
+      action:
+        run_job_template:
+          organization: "midrange"
+          name: "remediate-missing-org"
