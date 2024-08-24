@@ -18,7 +18,7 @@
           name: "remediate-missing-org"
     - name: Default debug
       condition: event.payload is defined
-      action:
+      actions:
         - debug:
             var: event.payload.operation
         - debug:
