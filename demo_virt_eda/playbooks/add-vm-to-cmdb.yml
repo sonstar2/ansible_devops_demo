@@ -1,7 +1,7 @@
 ---
 - name: Add the new VM to the CMDB inventory in ServiceNow
   hosts: all
-  become: true
+  gather_facts: false
   tasks:
     - name: Set the VM hostname and namespace vars
       ansible.builtin.set_fact:
