@@ -2,11 +2,33 @@
 - name: Add the new VM to the CMDB inventory in ServiceNow
   hosts: all
   gather_facts: false
+  # The following vars should be set on the job
+  # snow_instance - the URL to a ServiceNow instance (eg. https://dev123456.service-now.com)
+  # snow_username - the ServiceNow API access username
+  # snow_password - the ServiceNow API access password
+  # ocp_host - the hostname of the openShift API server
+  # ocp_username - the username for accessing the openshift API
+  # ocp_password - the password for accessing the openshift API
   tasks:
     - name: Set the VM hostname and namespace vars
       ansible.builtin.set_fact:
         vm_hostname: "{{ ansible_eda.event.body.kubernetes.labels.vm_kubevirt_io_name }}"
         vm_namespace: "{{ ansible_eda.event.body.kubernetes.namespace_name }}"
+
+    - name: Get VM details from OpenShift Virtualization
+      redhat.openshift_virtualization.kubevirt_vm_info:
+        host: "{{ ocp_host }}"
+        username: "{{ ocp_username }}"
+        password: "{{ ocp_password }}"
+        validate_certs: false
+        name: "{{ vm_hostname }}"
+        namespace: "{{ vm_namespace }}"
+      register: vm_details
+
+    - name: Debug the VM details
+      ansible.builtin.debug:
+        var: vm_details
+
 
     - name: Create a configuration item
       servicenow.itsm.configuration_item:
