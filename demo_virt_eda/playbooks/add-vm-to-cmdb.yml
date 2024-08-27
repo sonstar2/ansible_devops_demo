@@ -15,6 +15,22 @@
         vm_hostname: "{{ ansible_eda.event.body.kubernetes.labels.vm_kubevirt_io_name }}"
         vm_namespace: "{{ ansible_eda.event.body.kubernetes.namespace_name }}"
 
+    - name: Debug 1
+      ansible.builtin.debug:
+        var: ocp_host
+    - name: Debug 2
+      ansible.builtin.debug:
+        var: ocp_username
+    - name: Debug 3
+      ansible.builtin.debug:
+        var: ocp_password
+    - name: Debug 4
+      ansible.builtin.debug:
+        var: vm_hostname
+    - name: Debug 5
+      ansible.builtin.debug:
+        var: vm_namespace
+
     - name: Get VM details from OpenShift Virtualization
       redhat.openshift_virtualization.kubevirt_vm_info:
         host: "{{ ocp_host }}"
