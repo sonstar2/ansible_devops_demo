@@ -1,0 +1,27 @@
+---
+- name: Add the new VM to the CMDB inventory in ServiceNow
+  hosts: all
+  become: true
+  tasks:
+    - name: Set the VM hostname and namespace vars
+      ansible.builtin.set_fact:
+        vm_hostname: "{{ ansible_eda.event.body.kubernetes.labels.vm_kubevirt_io_name }}"
+        vm_namespace: "{{ ansible_eda.event.body.kubernetes.namespace_name }}"
+
+    - name: Create a configuration item
+      servicenow.itsm.configuration_item:
+        instance:
+          host: "{{ snow_instance }}"
+          username: "{{ snow_username }}"
+          password: "{{ snow_password }}"
+        name: "{{ vm_hostname }}"
+        sys_class_name: cmdb_ci_server
+        environment: production
+        category: Virtual Machine
+        other:
+          namespace: "{{ vm_namespace }}"
+      register: new_ci
+
+    - name: Debug the new CI details
+      ansible.builtin.debug:
+        var: new_ci
