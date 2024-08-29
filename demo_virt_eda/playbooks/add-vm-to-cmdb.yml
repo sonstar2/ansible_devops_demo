@@ -30,7 +30,7 @@
     - name: Get VM details from OpenShift Virtualization
       redhat.openshift_virtualization.kubevirt_vm_info:
         host: "{{ ocp_host }}"
-        api_token: "{{ ocp_token }}"
+        api_key: "{{ ocp_token }}"
         validate_certs: false
         name: "{{ vm_hostname }}"
         namespace: "{{ vm_namespace }}"
