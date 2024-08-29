@@ -7,8 +7,7 @@
   # snow_username - the ServiceNow API access username
   # snow_password - the ServiceNow API access password
   # ocp_host - the hostname of the openShift API server
-  # ocp_username - the username for accessing the openshift API
-  # ocp_password - the password for accessing the openshift API
+  # ocp_token - API Access Token
   tasks:
     - name: Set the VM hostname and namespace vars
       ansible.builtin.set_fact:
@@ -20,10 +19,7 @@
         var: ocp_host
     - name: Debug 2
       ansible.builtin.debug:
-        var: ocp_username
-    - name: Debug 3
-      ansible.builtin.debug:
-        var: ocp_password
+        var: ocp_token
     - name: Debug 4
       ansible.builtin.debug:
         var: vm_hostname
@@ -34,8 +30,7 @@
     - name: Get VM details from OpenShift Virtualization
       redhat.openshift_virtualization.kubevirt_vm_info:
         host: "{{ ocp_host }}"
-        username: "{{ ocp_username }}"
-        password: "{{ ocp_password }}"
+        api_token: "{{ ocp_token }}"
         validate_certs: false
         name: "{{ vm_hostname }}"
         namespace: "{{ vm_namespace }}"
