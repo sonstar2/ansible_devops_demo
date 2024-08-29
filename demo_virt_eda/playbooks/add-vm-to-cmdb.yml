@@ -39,7 +39,7 @@
         environment: production
         category: Virtual Machine
         install_status: installed
-        mac_address: "{{ vm_details.resources[0].spec.template.interfaces[0].macAddress }}"
+        mac_address: "{{ vm_details.resources[0].spec.template.spec.domain.devices.interfaces[0].macAddress }}"
         operational_status: operational
         serial_number: "{{ vm_details.resources[0].metadata.uid }}"
       register: new_ci
