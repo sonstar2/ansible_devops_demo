@@ -103,6 +103,23 @@ controller_templates:
       - "Demo Credential"
     state: present
 
+  - name: "add-vm-to-cmdb"
+    playbook: "demo_virt_eda/playbooks/add-vm-to-cmdb.yml"
+    job_type: "run"
+    organization: "virtualization"
+    inventory: "Demo Inventory"
+    project: "ocpvirt-project"
+    ask_variables_on_launch: true
+    extra_vars:
+      ocp_host: "{{ ocp_host }}"
+      ocp_token: "{{ ocp_token }}"
+      snow_instance: "{{ snow_instance }}"
+      snow_username: "{{ snow_username }}"
+      snow_password: "{{ snow_password }}"
+    credentials:
+      - "Demo Credential"
+    state: present
+
 controller_workflows:
   - name: "add-vm-and-patch"
     description: "Add a new OCPVirt VM to the CMDB inventory and apply patches"
@@ -115,12 +132,20 @@ controller_workflows:
         unified_job_template: "add-vm-to-inventory"
         success_nodes:
           - "patch-vms"
+          - "add-vm-to-cmdb"
         failure_nodes: []
         always_nodes: []
         credentials: []
 
       - identifier: patch-vms
         unified_job_template: "patch-vms"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+
+      - identifier: add-vm-to-cmdb
+        unified_job_template: "add-vm-to-cmdb"
         success_nodes: []
         failure_nodes: []
         always_nodes: []
