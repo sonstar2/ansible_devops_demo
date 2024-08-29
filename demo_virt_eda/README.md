@@ -4,7 +4,7 @@ Detect OpenShift Virtualization events and trigger automation with EDA
 
 Accompanying slide deck:
 
-<TODO:Include deck>
+https://docs.google.com/presentation/d/1lm2ZNa2f0BwqHnoOs6Gdh6ptxUrk7jgI4pdLgiJOPac/edit#slide=id.g2f44695b139_0_0
 
 To deploy:
 
