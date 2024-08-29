@@ -18,6 +18,10 @@
       ansible.builtin.debug:
         var: ocp_host
 
+    - name: With what token?
+      ansible.builtin.debug:
+        var: ocp_token
+
     - name: Get VM details from OpenShift Virtualization
       redhat.openshift_virtualization.kubevirt_vm_info:
         host: "{{ ocp_host }}"
