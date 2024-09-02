@@ -1,0 +1,21 @@
+---
+- name: Track Windows events
+  hosts: all
+  sources:
+    - name: Listen to Kafka server broker
+      ansible.eda.kafka:
+        topic: "windows-events"
+        host: "{{ kafkahostname }}"
+        port: "{{ kafkaport }}"
+        group_id: "{{ kafkagroupid }}"
+        # Note that the following lines are insecure and should
+        # not be used in a production environment
+        check_hostname: false
+        verify_mode: CERT_OPTIONAL
+  rules:
+    - name: Trigger Windows jobs
+      condition: event.body.host.os_family == "windows" and event.body.severity == "critical"
+      actions:
+        - run_job_template:
+            name: "windows-details"
+            organization: midrange

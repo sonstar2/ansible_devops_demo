@@ -1,0 +1,21 @@
+---
+- name: Track AIX events
+  hosts: all
+  sources:
+    - name: Listen to Kafka server broker
+      ansible.eda.kafka:
+        topic: "aix-events"
+        host: "{{ kafkahostname }}"
+        port: "{{ kafkaport }}"
+        group_id: "{{ kafkagroupid }}"
+        # Note that the following lines are insecure and should
+        # not be used in a production environment
+        check_hostname: false
+        verify_mode: CERT_OPTIONAL
+  rules:
+    - name: Trigger AIX jobs
+      condition: event.body.host.os_family == "aix" and event.body.severity == "critical"
+      actions:
+        - run_job_template:
+            name: "aix-details"
+            organization: midrange

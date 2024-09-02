@@ -1,0 +1,7 @@
+---
+kafka_namespace: amqstreams
+kafka_instance_name: "eda-multiteam-kafka"
+kafka_topic_list:
+  - "aix-events"
+  - "windows-events"
+  - "linux-events"
