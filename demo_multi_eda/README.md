@@ -21,7 +21,6 @@ https://demo.redhat.com/catalog?category=Open_Environments&item=babylon-catalog-
 - ansible.eda
 - redhat.openshift
 - infra.controller_configuration (available from Red Hat Cloud Console Automation Hub only)
-- servicenow.itsm
 
 6) Generate an AAP Licensing Manifest File (refer to https://docs.ansible.com/automation-controller/4.4/html/userguide/import_license.html#obtain-sub-manifest for details)
 7) Run the following command (substituting your relevant values):
