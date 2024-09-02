@@ -21,7 +21,15 @@
         namespace: "{{ vm_namespace }}"
         name: "{{ vm_hostname }}"
       register: vmi_details
-      
+
+    - name: Get Snow Instance Details
+      servicenow.itsm.configuration_item_info:
+        instance:
+          host: "{{ snow_instance }}"
+          username: "{{ snow_username }}"
+          password: "{{ snow_password }}"
+        name: "{{ vm_hostname }}"
+      register: snow_details
 
 #    - name: Get VMI details from OpenShift Virtualization
 #      kubevirt.core.kubevirt_vmi_info:
@@ -35,3 +43,7 @@
     - name: Debug the VMI details
       ansible.builtin.debug:
         var: vmi_details
+
+    - name: Debug the SNow Details
+      ansible.builtin.debug:
+        var: snow_details
