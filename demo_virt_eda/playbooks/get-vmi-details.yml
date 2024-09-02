@@ -28,7 +28,8 @@
           host: "{{ snow_instance }}"
           username: "{{ snow_username }}"
           password: "{{ snow_password }}"
-        name: "{{ vm_hostname }}"
+        # name: "{{ vm_hostname }}"
+        name: DatabaseServer1
       register: snow_details
 
 #    - name: Get VMI details from OpenShift Virtualization
