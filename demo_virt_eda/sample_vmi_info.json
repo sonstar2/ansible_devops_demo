@@ -1,0 +1,353 @@
+{
+  "vmi_details": {
+    "changed": false,
+    "resources": [
+      {
+        "apiVersion": "kubevirt.io/v1",
+        "kind": "VirtualMachineInstance",
+        "metadata": {
+          "annotations": {
+            "kubevirt.io/latest-observed-api-version": "v1",
+            "kubevirt.io/storage-observed-api-version": "v1",
+            "kubevirt.io/vm-generation": "1",
+            "vm.kubevirt.io/flavor": "small",
+            "vm.kubevirt.io/os": "fedora",
+            "vm.kubevirt.io/workload": "server"
+          },
+          "creationTimestamp": "2024-08-20T22:51:01Z",
+          "finalizers": [
+            "kubevirt.io/virtualMachineControllerFinalize",
+            "foregroundDeleteVirtualMachine"
+          ],
+          "generation": 402,
+          "labels": {
+            "kubevirt.io/domain": "finally-ssh",
+            "kubevirt.io/nodeName": "ip-10-0-10-44.us-east-2.compute.internal",
+            "kubevirt.io/size": "small",
+            "simon": "idiot",
+            "special": "key"
+          },
+          "managedFields": [
+            {
+              "apiVersion": "kubevirt.io/v1",
+              "fieldsType": "FieldsV1",
+              "fieldsV1": {
+                "f:metadata": {
+                  "f:annotations": {
+                    ".": {},
+                    "f:kubevirt.io/latest-observed-api-version": {},
+                    "f:kubevirt.io/storage-observed-api-version": {},
+                    "f:kubevirt.io/vm-generation": {},
+                    "f:vm.kubevirt.io/flavor": {},
+                    "f:vm.kubevirt.io/os": {},
+                    "f:vm.kubevirt.io/workload": {}
+                  },
+                  "f:finalizers": {
+                    ".": {},
+                    "v:\"kubevirt.io/virtualMachineControllerFinalize\"": {}
+                  },
+                  "f:labels": {
+                    ".": {},
+                    "f:kubevirt.io/domain": {},
+                    "f:kubevirt.io/nodeName": {},
+                    "f:kubevirt.io/size": {},
+                    "f:simon": {},
+                    "f:special": {}
+                  },
+                  "f:ownerReferences": {
+                    ".": {},
+                    "k:{\"uid\":\"05b5e914-715d-4712-88d3-762f5c5e52f6\"}": {}
+                  }
+                },
+                "f:spec": {
+                  ".": {},
+                  "f:architecture": {},
+                  "f:domain": {
+                    ".": {},
+                    "f:cpu": {
+                      ".": {},
+                      "f:cores": {},
+                      "f:sockets": {},
+                      "f:threads": {}
+                    },
+                    "f:devices": {
+                      ".": {},
+                      "f:disks": {},
+                      "f:interfaces": {},
+                      "f:networkInterfaceMultiqueue": {},
+                      "f:rng": {}
+                    },
+                    "f:features": {
+                      ".": {},
+                      "f:acpi": {},
+                      "f:smm": {
+                        ".": {},
+                        "f:enabled": {}
+                      }
+                    },
+                    "f:firmware": {
+                      ".": {},
+                      "f:bootloader": {
+                        ".": {},
+                        "f:efi": {}
+                      },
+                      "f:uuid": {}
+                    },
+                    "f:machine": {
+                      ".": {},
+                      "f:type": {}
+                    },
+                    "f:memory": {
+                      ".": {},
+                      "f:guest": {}
+                    },
+                    "f:resources": {}
+                  },
+                  "f:networks": {},
+                  "f:terminationGracePeriodSeconds": {},
+                  "f:volumes": {}
+                },
+                "f:status": {
+                  ".": {},
+                  "f:activePods": {
+                    ".": {},
+                    "f:2c7debc7-0587-45e3-b0db-834a7dbf90d6": {}
+                  },
+                  "f:conditions": {},
+                  "f:currentCPUTopology": {
+                    ".": {},
+                    "f:cores": {},
+                    "f:sockets": {},
+                    "f:threads": {}
+                  },
+                  "f:guestOSInfo": {},
+                  "f:interfaces": {},
+                  "f:launcherContainerImageVersion": {},
+                  "f:machine": {
+                    ".": {},
+                    "f:type": {}
+                  },
+                  "f:migrationMethod": {},
+                  "f:migrationTransport": {},
+                  "f:nodeName": {},
+                  "f:phase": {},
+                  "f:phaseTransitionTimestamps": {},
+                  "f:qosClass": {},
+                  "f:runtimeUser": {},
+                  "f:selinuxContext": {},
+                  "f:virtualMachineRevisionName": {},
+                  "f:volumeStatus": {}
+                }
+              },
+              "manager": "Go-http-client",
+              "operation": "Update",
+              "time": "2024-09-02T00:18:23Z"
+            }
+          ],
+          "name": "finally-ssh",
+          "namespace": "vm-demo-nab",
+          "ownerReferences": [
+            {
+              "apiVersion": "kubevirt.io/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "VirtualMachine",
+              "name": "finally-ssh",
+              "uid": "05b5e914-715d-4712-88d3-762f5c5e52f6"
+            }
+          ],
+          "resourceVersion": "22815356",
+          "uid": "e4efc234-947d-4db6-bebf-b45ce66ecf14"
+        },
+        "spec": {
+          "architecture": "amd64",
+          "domain": {
+            "cpu": {
+              "cores": 1,
+              "model": "host-model",
+              "sockets": 1,
+              "threads": 1
+            },
+            "devices": {
+              "disks": [
+                {
+                  "disk": {
+                    "bus": "virtio"
+                  },
+                  "name": "rootdisk"
+                },
+                {
+                  "disk": {
+                    "bus": "virtio"
+                  },
+                  "name": "cloudinitdisk"
+                }
+              ],
+              "interfaces": [
+                {
+                  "macAddress": "02:3a:6e:00:00:23",
+                  "masquerade": {},
+                  "model": "virtio",
+                  "name": "default"
+                }
+              ],
+              "networkInterfaceMultiqueue": true,
+              "rng": {}
+            },
+            "features": {
+              "acpi": {
+                "enabled": true
+              },
+              "smm": {
+                "enabled": true
+              }
+            },
+            "firmware": {
+              "bootloader": {
+                "efi": {}
+              },
+              "uuid": "23e6c8cc-42de-5f98-a736-e9efb69891da"
+            },
+            "machine": {
+              "type": "pc-q35-rhel9.2.0"
+            },
+            "memory": {
+              "guest": "2Gi"
+            },
+            "resources": {
+              "requests": {
+                "memory": "2Gi"
+              }
+            }
+          },
+          "evictionStrategy": "LiveMigrate",
+          "networks": [
+            {
+              "name": "default",
+              "pod": {}
+            }
+          ],
+          "terminationGracePeriodSeconds": 180,
+          "volumes": [
+            {
+              "dataVolume": {
+                "name": "finally-ssh"
+              },
+              "name": "rootdisk"
+            },
+            {
+              "cloudInitConfigDrive": {
+                "userData": "#cloud-config\nuser: fedora\npassword: fedora\nchpasswd: { expire: False }\nssh_pwauth: True"
+              },
+              "name": "cloudinitdisk"
+            }
+          ]
+        },
+        "status": {
+          "activePods": {
+            "2c7debc7-0587-45e3-b0db-834a7dbf90d6": "ip-10-0-10-44.us-east-2.compute.internal"
+          },
+          "conditions": [
+            {
+              "lastProbeTime": null,
+              "lastTransitionTime": "2024-08-20T22:51:37Z",
+              "status": "True",
+              "type": "Ready"
+            },
+            {
+              "lastProbeTime": null,
+              "lastTransitionTime": null,
+              "message": "cannot migrate VMI: PVC finally-ssh is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+              "reason": "DisksNotLiveMigratable",
+              "status": "False",
+              "type": "LiveMigratable"
+            },
+            {
+              "lastProbeTime": "2024-08-29T03:38:13Z",
+              "lastTransitionTime": null,
+              "status": "True",
+              "type": "AgentConnected"
+            }
+          ],
+          "currentCPUTopology": {
+            "cores": 1,
+            "sockets": 1,
+            "threads": 1
+          },
+          "guestOSInfo": {},
+          "interfaces": [
+            {
+              "infoSource": "domain",
+              "ipAddress": "10.130.5.180",
+              "ipAddresses": [
+                "10.130.5.180"
+              ],
+              "mac": "02:3a:6e:00:00:23",
+              "name": "default",
+              "queueCount": 1
+            }
+          ],
+          "launcherContainerImageVersion": "registry.redhat.io/container-native-virtualization/virt-launcher-rhel9@sha256:b97a300360c17c7dd62df3c4bef11389aa1489caaa34c11465f283c9ad46c5b7",
+          "machine": {
+            "type": "pc-q35-rhel9.2.0"
+          },
+          "migrationMethod": "BlockMigration",
+          "migrationTransport": "Unix",
+          "nodeName": "ip-10-0-10-44.us-east-2.compute.internal",
+          "phase": "Running",
+          "phaseTransitionTimestamps": [
+            {
+              "phase": "Pending",
+              "phaseTransitionTimestamp": "2024-08-20T22:51:01Z"
+            },
+            {
+              "phase": "Scheduling",
+              "phaseTransitionTimestamp": "2024-08-20T22:51:01Z"
+            },
+            {
+              "phase": "Scheduled",
+              "phaseTransitionTimestamp": "2024-08-20T22:51:37Z"
+            },
+            {
+              "phase": "Running",
+              "phaseTransitionTimestamp": "2024-08-20T22:51:40Z"
+            }
+          ],
+          "qosClass": "Burstable",
+          "runtimeUser": 107,
+          "selinuxContext": "system_u:object_r:container_file_t:s0:c463,c877",
+          "virtualMachineRevisionName": "revision-start-vm-05b5e914-715d-4712-88d3-762f5c5e52f6-1",
+          "volumeStatus": [
+            {
+              "name": "cloudinitdisk",
+              "size": 1048576,
+              "target": "vdb"
+            },
+            {
+              "name": "rootdisk",
+              "persistentVolumeClaimInfo": {
+                "accessModes": [
+                  "ReadWriteOnce"
+                ],
+                "capacity": {
+                  "storage": "30Gi"
+                },
+                "filesystemOverhead": "0",
+                "requests": {
+                  "storage": "32212254720"
+                },
+                "volumeMode": "Block"
+              },
+              "target": "vda"
+            }
+          ]
+        }
+      }
+    ],
+    "api_found": true,
+    "failed": false
+  },
+  "_ansible_verbose_always": true,
+  "_ansible_no_log": false,
+  "changed": false
+}
