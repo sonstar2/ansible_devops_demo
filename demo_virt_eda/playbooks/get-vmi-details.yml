@@ -11,14 +11,26 @@
         vm_hostname: "finally-ssh"
         vm_namespace: "vm-demo-nab"
 
-    - name: Get VMI details from OpenShift Virtualization
-      kubevirt.core.kubevirt_vmi_info:
-        host: "{{ ocp_host }}"
+    - name: Get VMI Details
+      kubernetes.core.k8s_info:
         api_key: "{{ ocp_token }}"
+        host: "{{ ocp_host }}"
         validate_certs: false
-        name: "{{ vm_hostname }}"
+        api_version: v1
+        kind: VirtualMachineInstance
         namespace: "{{ vm_namespace }}"
+        name: "{{ vm_hostname }}"
       register: vmi_details
+      
+
+#    - name: Get VMI details from OpenShift Virtualization
+#      kubevirt.core.kubevirt_vmi_info:
+#        host: "{{ ocp_host }}"
+#        api_key: "{{ ocp_token }}"
+#        validate_certs: false
+#        name: "{{ vm_hostname }}"
+#        namespace: "{{ vm_namespace }}"
+#      register: vmi_details
 
     - name: Debug the VMI details
       ansible.builtin.debug:
