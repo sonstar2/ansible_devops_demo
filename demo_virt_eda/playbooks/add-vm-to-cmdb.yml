@@ -22,15 +22,10 @@
       ansible.builtin.debug:
         var: ocp_token
 
-#    - name: Get VM details from OpenShift Virtualization
-#      redhat.openshift_virtualization.kubevirt_vm_info:
-#        host: "{{ ocp_host }}"
-#        api_key: "{{ ocp_token }}"
-#        validate_certs: false
-#        name: "{{ vm_hostname }}"
-#        namespace: "{{ vm_namespace }}"
-#      register: vm_details
-
+    # NOTE: This should eventually be replaced with:
+    # redhat.openshift_virtualization.kubevirt_vmi_info:
+    # when that collection is updated.
+    #
     - name: Get VM details from k8s Interface
       kubernetes.core.k8s_info:
         api_version: v1
