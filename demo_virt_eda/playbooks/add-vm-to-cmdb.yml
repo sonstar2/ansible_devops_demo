@@ -47,9 +47,19 @@
         environment: production
         category: Virtual Machine
         install_status: installed
+        ip_address: "{{ vm_details.resources[0].status.interfaces[0].ipAddress }}"
         mac_address: "{{ vm_details.resources[0].spec.template.spec.domain.devices.interfaces[0].macAddress }}"
         operational_status: operational
         serial_number: "{{ vm_details.resources[0].metadata.uid }}"
+        other:
+          virtual: true
+          ram: "{{ (vm_details.resources[0].spec.template.spec.domain.memory.guest | replace('Gi', '') | int) * 1024 }}"
+          cpu_name: "{{ vm_details.resources[0].spec.domain.cpu.model }}"
+          cpu_count: "{{ vm_details.resources[0].spec.domain.cpu.sockets }}"
+          cpu_core_count: "{{ vm_details.resources[0].spec.domain.cpu.cores }}"
+          cpu_type: "{{ vm_details.resources[0].spec.architecture }}"
+          os_version:
+          os: "{{ vm_details.resources[0].metadata.annotations.vm.kubevirt.io/os }}"
       register: new_ci
 
     - name: Debug the new CI details
