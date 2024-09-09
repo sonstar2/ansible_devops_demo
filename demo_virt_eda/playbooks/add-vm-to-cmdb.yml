@@ -22,14 +22,24 @@
       ansible.builtin.debug:
         var: ocp_token
 
-    - name: Get VM details from OpenShift Virtualization
-      redhat.openshift_virtualization.kubevirt_vm_info:
+#    - name: Get VM details from OpenShift Virtualization
+#      redhat.openshift_virtualization.kubevirt_vm_info:
+#        host: "{{ ocp_host }}"
+#        api_key: "{{ ocp_token }}"
+#        validate_certs: false
+#        name: "{{ vm_hostname }}"
+#        namespace: "{{ vm_namespace }}"
+#      register: vm_details
+
+    - name: Get VM details from k8s Interface
+      kubernetes.core.k8s_info:
+        api_version: v1
         host: "{{ ocp_host }}"
         api_key: "{{ ocp_token }}"
         validate_certs: false
+        kind: VirtualMachineInstance
         name: "{{ vm_hostname }}"
         namespace: "{{ vm_namespace }}"
-      register: vm_details
 
     - name: Debug the VM details
       ansible.builtin.debug:
