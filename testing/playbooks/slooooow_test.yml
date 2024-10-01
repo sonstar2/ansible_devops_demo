@@ -1,0 +1,27 @@
+---
+- name: Dump out some debug and take your time about it
+  hosts: all
+
+  tasks:
+    - name: Dump out ansible_facts for testing
+      ansible.builtin.debug:
+        var: ansible_facts
+
+
+    - name: Debug Message
+      ansible.builtin.debug:
+        msg: "About to do something slow"
+
+    - name: Take it slooooow
+      ansible.builtin.pause:
+        minutes: 45
+    
+    - name: Debug Message
+      ansible.builtin.debug:
+        msg: "Something slow is done..."
+    
+    - name: Dump out ansible_facts for testing
+      ansible.builtin.debug:
+        var: ansible_facts
+
+
