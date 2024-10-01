@@ -22,11 +22,17 @@
       ansible.builtin.debug:
         var: ocp_token
 
-    - name: Get VM details from OpenShift Virtualization
-      redhat.openshift_virtualization.kubevirt_vm_info:
+    # NOTE: This should eventually be replaced with:
+    # redhat.openshift_virtualization.kubevirt_vmi_info:
+    # when that collection is updated.
+    #
+    - name: Get VM details from k8s Interface
+      kubernetes.core.k8s_info:
+        api_version: v1
         host: "{{ ocp_host }}"
         api_key: "{{ ocp_token }}"
         validate_certs: false
+        kind: VirtualMachineInstance
         name: "{{ vm_hostname }}"
         namespace: "{{ vm_namespace }}"
       register: vm_details
@@ -47,9 +53,17 @@
         environment: production
         category: Virtual Machine
         install_status: installed
-        mac_address: "{{ vm_details.resources[0].spec.template.spec.domain.devices.interfaces[0].macAddress }}"
+        ip_address: "{{ vm_details.resources[0].status.interfaces[0].ipAddress }}"
+        mac_address: "{{ vm_details.resources[0].spec.domain.devices.interfaces[0].macAddress }}"
         operational_status: operational
         serial_number: "{{ vm_details.resources[0].metadata.uid }}"
+        other:
+          virtual: true
+          ram: "{{ (vm_details.resources[0].spec.domain.memory.guest | replace('Gi', '') | int) * 1024 }}"
+          cpu_name: "{{ vm_details.resources[0].spec.domain.cpu.model }}"
+          cpu_count: "{{ vm_details.resources[0].spec.domain.cpu.sockets }}"
+          cpu_core_count: "{{ vm_details.resources[0].spec.domain.cpu.cores }}"
+          cpu_type: "{{ vm_details.resources[0].spec.architecture }}"
       register: new_ci
 
     - name: Debug the new CI details
