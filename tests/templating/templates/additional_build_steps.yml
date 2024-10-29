@@ -1,0 +1,7 @@
+---
+tasks:
+  - name: Task 1
+    do_something: yeah
+  - name: Task 2
+    do_something_else: ok
+    

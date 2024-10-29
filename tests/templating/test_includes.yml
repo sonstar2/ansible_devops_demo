@@ -1,0 +1,48 @@
+---
+- name: Test Templating and include_vars
+  hosts: localhost
+  gather_facts: false
+  vars:
+    staging_dir: "/tmp/"
+    image_name: "test_image"
+
+  tasks:
+
+    - name: Ensure staging directory exists on localhost
+      ansible.builtin.file:
+        path: "{{ staging_dir }}/{{ image_name }}"
+        state: directory
+        mode: '0755'
+
+    - name: Get bindep vars file
+      ansible.builtin.template:
+        src: "templates/bindep-vars.j2"
+        dest: "{{ staging_dir }}/{{ image_name }}/bindep.yml"
+        trim_blocks: false
+        lstrip_blocks: false
+        mode: '640'
+    
+    - name: Get extra steps file
+      ansible.builtin.template:
+        src: "templates/additional_build_steps.j2"
+        dest: "{{ staging_dir }}/{{ image_name }}/additional_build_steps.yml"
+        trim_blocks: false
+        lstrip_blocks: false
+        mode: '640'
+
+    - name: Load vars (get bindep requirements )
+      ansible.builtin.include_vars: "{{ staging_dir }}/{{ image_name }}/{{ file_item }}"
+      remote_src: true
+      loop:
+        - bindep.yml
+        - additional_build_steps.yml
+      loop_control:
+        loop_var: file_item
+
+    - name: Template out local bindep template files
+      ansible.builtin.template:
+        src: "templates/bindep.j2"
+        dest: "{{ staging_dir }}/{{ image_name }}/bindep.txt"
+        trim_blocks: false
+        lstrip_blocks: false
+        mode: '640'
