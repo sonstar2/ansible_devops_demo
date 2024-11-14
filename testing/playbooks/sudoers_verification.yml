@@ -1,0 +1,25 @@
+---
+- name: Dirty testing of sudoers config
+  hosts: all
+  vars:
+    the_folder: "/etc/sudoers.d/"
+
+  tasks:
+    - name: Find the contents
+      ansible.builtin.find:
+        paths: "{{ the_folder }}"
+        file_type: file
+      register: paths_with_find
+
+    - name: Debug the first way
+      ansible.builtin.debug:
+        var: paths_with_find
+
+    - name: Find them the bad way
+      ansible.builtin.command:
+        cmd: "/usr/bin/ls -al {{ the_folder }}"
+      register: paths_with_ls
+
+    - name: Debug the second way
+      ansible.builtin.debug:
+        var: paths_with_ls
