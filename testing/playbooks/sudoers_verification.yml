@@ -20,7 +20,7 @@
 
     - name: Find them the bad way
       ansible.builtin.command:
-        cmd: "whoami; sudo -v; /usr/bin/ls -al {{ the_folder }}"
+        cmd: "whoami; sudo -l; /usr/bin/ls -al {{ the_folder }}"
       register: paths_with_ls
       become: true
       become_user: dummy
