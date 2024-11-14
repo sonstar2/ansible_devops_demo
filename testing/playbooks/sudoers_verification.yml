@@ -18,9 +18,20 @@
       ansible.builtin.debug:
         var: paths_with_find
 
+    - name: Do you even sudo, bro
+      ansible.builtin.command:
+        cmd: "sudo -l"
+      register: the_sudo_deets
+      become: true
+      become_user: dummy
+
+    - name: Debug the sudo way
+      ansible.builtin.debug:
+        var: the_sudo_deets
+
     - name: Find them the bad way
       ansible.builtin.command:
-        cmd: "whoami; sudo -l; /usr/bin/ls -al {{ the_folder }}"
+        cmd: "sudo -l; /usr/bin/ls -al {{ the_folder }}"
       register: paths_with_ls
       become: true
       become_user: dummy
