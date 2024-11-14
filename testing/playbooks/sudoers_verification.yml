@@ -1,7 +1,6 @@
 ---
 - name: Dirty testing of sudoers config
   hosts: all
-  gather_facts: false
   vars:
     the_folder: "/etc/sudoers.d/"
 
