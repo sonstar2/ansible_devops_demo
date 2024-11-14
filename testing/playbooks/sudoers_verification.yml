@@ -25,6 +25,7 @@
       become: true
       become_user: dummy
 
+
     - name: Debug the second way
       ansible.builtin.debug:
         var: paths_with_ls
