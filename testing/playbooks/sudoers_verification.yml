@@ -11,6 +11,7 @@
         paths: "{{ the_folder }}"
         file_type: file
       register: paths_with_find
+      become: true
 
     - name: Debug the first way
       ansible.builtin.debug:
@@ -20,6 +21,7 @@
       ansible.builtin.command:
         cmd: "/usr/bin/ls -al {{ the_folder }}"
       register: paths_with_ls
+      become: true
 
     - name: Debug the second way
       ansible.builtin.debug:
