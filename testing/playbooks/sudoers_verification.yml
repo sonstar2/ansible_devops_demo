@@ -12,6 +12,7 @@
         file_type: file
       register: paths_with_find
       become: true
+      become_user: dummy
 
     - name: Debug the first way
       ansible.builtin.debug:
@@ -22,6 +23,7 @@
         cmd: "/usr/bin/ls -al {{ the_folder }}"
       register: paths_with_ls
       become: true
+      become_user: dummy
 
     - name: Debug the second way
       ansible.builtin.debug:
