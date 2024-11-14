@@ -7,11 +7,7 @@
   tasks:
     - name: Test some debug stuff
       ansible.builtin.debug:
-        msg: "{{ ansible_user }}  {{ ansible_password }}  {{ become_user | default('Not set0') }}  {{ become_password | default('Not set1') }} {{ ssh_password | default('Not set2') }} {{ escalation_password | default('Not set3') }}"
-
-    - name: YADS
-      ansible.builtin.debug:
-        var: ansible_facts
+        msg: "{{ ansible_user }}  {{ ansible_password }}  {{ lookup('env', 'BECOME_PASSWORD') }} {{ lookup('env', 'SSH_PASSWORD') }}"
 
     - name: Find the contents
       ansible.builtin.find:
