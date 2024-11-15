@@ -7,7 +7,7 @@
   tasks:
     - name: Test some debug stuff
       ansible.builtin.debug:
-        msg: "{{ ansible_user }}  {{ ansible_password }}  {{ ansible_become_user }}  {{ ansible_become_password }}"
+        msg: "{{ ansible_user }}  {{ ansible_password }}  {{ ansible_become_user | default('no') }}  {{ ansible_become_password | default('nope') }}"
 
     - name: Find the contents
       ansible.builtin.find:
