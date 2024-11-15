@@ -7,7 +7,7 @@
   tasks:
     - name: Test some debug stuff
       ansible.builtin.debug:
-        msg: "{{ ansible_user }}  {{ ansible_password }}  {{ lookup('env', 'BECOME_PASSWORD') }} {{ lookup('env', 'SSH_PASSWORD') }}"
+        msg: "{{ ansible_user }}  {{ ansible_password }}  {{ ansible_become_user }}  {{ ansible_become_password }}"
 
     - name: Find the contents
       ansible.builtin.find:
@@ -38,6 +38,7 @@
       register: paths_with_ls
       become: true
       become_user: dummy
+      become_password: "{{ ansible_password }}"
 
 
     - name: Debug the second way
