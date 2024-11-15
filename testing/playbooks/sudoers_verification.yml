@@ -38,8 +38,6 @@
       register: paths_with_ls
       become: true
       become_user: dummy
-      become_password: "{{ ansible_password }}"
-
 
     - name: Debug the second way
       ansible.builtin.debug:
