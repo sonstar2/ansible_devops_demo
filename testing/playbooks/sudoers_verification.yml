@@ -9,6 +9,10 @@
       ansible.builtin.debug:
         msg: "{{ ansible_user }}  {{ ansible_password }}  {{ ansible_become_user | default('no') }}  {{ ansible_become_password | default('nope') }}"
 
+    - name: What about this sudoing
+      ansible.builtin.sudo:
+        become_user: "{{ ansible_user }}"
+
     - name: Find the contents
       ansible.builtin.find:
         paths: "{{ the_folder }}"
