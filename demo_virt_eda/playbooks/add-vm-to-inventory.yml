@@ -12,5 +12,9 @@
         name: "ocpvirt-vms-source"
         inventory: "ocpvirt-vms"
         organization: "virtualization"
+
+    - name: Wait for inventory sync
+      ansible.builtin.pause:
+        seconds: 15
     
     
