@@ -1,0 +1,20 @@
+---
+- name: Add a newly created OpenShift Virtualization virtual machine to an AAP Inventory
+  hosts: localhost
+  connection: local
+  
+  tasks:
+    - name: Force a dynamic inventory refresh
+      ansible.controller.inventory_source_update:
+        controller_host: "{{ controller_hostname }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        name: "ocpvirt-vms-source"
+        inventory: "ocpvirt-vms"
+        organization: "virtualization"
+
+    - name: Wait for inventory sync
+      ansible.builtin.pause:
+        seconds: 15
+    
+    

@@ -1,0 +1,11 @@
+---
+- name: Patch all servers in the 'ocpvirt-vms' inventory
+  hosts: all
+  become: true
+  tasks:
+    - name: Update all packages
+      ansible.builtin.package:
+        name: "*"
+        state: latest
+#    - name: Reboot all servers
+#      ansible.builtin.reboot:
