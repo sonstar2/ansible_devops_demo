@@ -4,12 +4,15 @@
     aap_ocp_install_connection:
       host: "{{ ocp_host }}"
       username: "{{ ocp_username }}"
-      password: "{{ ocp_password }}"
+      api_key: "{{ ocp_token }}"
       verify_ssl: false
       validate_certs: false
     aap_ocp_install_namespace: aap
     aap_ocp_install_operator:
       channel: "stable-2.4"
+    aap_ocp_install_platform:
+      namespace: aap
+      instance_name: demo-aap
     aap_ocp_install_controller:
       instance_name: demo-aap
       replicas: 1
@@ -18,6 +21,11 @@
       instance_name: demo-eda
       replicas: 1
       link_text: "Ansible Automation Platform EDA"
+    aap_ocp_install_hub:
+      instance_name: demo-hub
+      replicas: 1
+      link_text: "Ansible Automation Platform Hub"
+      storage_type: file
 
   block:
     - name: Install AAP and EDA
@@ -67,6 +75,7 @@
       until: "eda_admin_pwd.resources | length > 0"
       retries: 10
       delay: 30
+      when: not __aap_ocp_install_25_install
 
     - name: "If login succeeded revoke OpenShift API token (again)"
       when: __aap_ocp_install_auth_results['openshift_auth']['api_key'] is defined and aap_ocp_install_connection['api_key'] is not defined
@@ -77,8 +86,21 @@
         state: absent
         api_key: "{{ __aap_ocp_install_auth_results['openshift_auth']['api_key'] }}"
       changed_when: false
+      ignore_errors: true
 
     # Set facts for the deploy_demo role
+    - name: Set facts for demo deployment
+      ansible.builtin.set_fact:
+      # NOTE: In AAP 2.5, both controller and EDA are accessed via the same gateway route
+      # and use the same user credentials
+        controller_hostname: "{{ __aap_ocp_install_platform_route }}"
+        controller_username: "admin"
+        controller_password: "{{ aap_admin_pwd.resources[0].data.password | b64decode }}"
+        eda_host: "{{ __aap_ocp_install_platform_route }}"
+        eda_username: "admin"
+        eda_password: "{{ aap_admin_pwd.resources[0].data.password | b64decode }}"
+      when: __aap_ocp_install_25_install
+
     - name: Set facts for demo deployment
       ansible.builtin.set_fact:
         controller_hostname: "{{ __aap_ocp_install_controller_route }}"
@@ -87,3 +109,5 @@
         eda_host: "{{ __aap_ocp_install_eda_route }}"
         eda_username: "admin"
         eda_password: "{{ eda_admin_pwd.resources[0].data.password | b64decode }}"
+      when: not __aap_ocp_install_25_install
+
