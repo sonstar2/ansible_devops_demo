@@ -14,12 +14,12 @@
 
     - name: Set the token
       ansible.builtin.set_fact:
-        __ocp_api_key: openshift_auth_results.openshift_auth.api_key
+        __ocp_api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
       when: ocp_token is not defined
       
     - name: Set the token
       ansible.builtin.set_fact:
-        __ocp_api_key: ocp_token
+        __ocp_api_key: "{{ ocp_token }}"
       when: ocp_token is defined
 
     - name: Create RHDH operator namespace in OpenShift
