@@ -3,7 +3,6 @@
   vars:
     aap_ocp_install_connection:
       host: "{{ ocp_host }}"
-      username: "{{ ocp_username }}"
       api_key: "{{ ocp_token }}"
       verify_ssl: false
       validate_certs: false
@@ -21,11 +20,11 @@
       instance_name: demo-eda
       replicas: 1
       link_text: "Ansible Automation Platform EDA"
-    aap_ocp_install_hub:
-      instance_name: demo-hub
-      replicas: 1
-      link_text: "Ansible Automation Platform Hub"
-      storage_type: file
+    #aap_ocp_install_hub:
+    #  instance_name: demo-hub
+    #  replicas: 1
+    #  link_text: "Ansible Automation Platform Hub"
+    #  storage_type: file
 
   block:
     - name: Install AAP and EDA
