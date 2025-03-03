@@ -15,7 +15,7 @@
   rules:
     - name: Register and patch new VM
       # condition: event.body.kubernetes.namespace_name == vars.vmnamespace and event.body.structured.msg is search("Found PID for", ignorecase=true)
-      condition: \
+      condition: >
         event.body is selectattr('objectRef.namespace', '==', vars.vmnamespace) and 
         event.body is selectattr('objectRef.resource', '==', 'virtualmachineinestances') and
         event.body is selectattr('verb', '==', 'create')
