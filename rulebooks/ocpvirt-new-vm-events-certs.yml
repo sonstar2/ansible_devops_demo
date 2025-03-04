@@ -8,6 +8,7 @@
         host: "{{ kafkahostname }}"
         port: "{{ kafkaport }}"
         group_id: "{{ kafkagroupid }}"
+        cafile: "/runner/certs/ca.crt"
         # Note that the following lines are insecure and should
         # not be used in a production environment
         check_hostname: false
