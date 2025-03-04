@@ -69,7 +69,7 @@
 
     - name: Display details for Kafka
       ansible.builtin.debug:
-        msg: "Kafka Bootstrap Host is: {{ kafkahostname }}:{{ kafkaport }}"
+        msg: "Kafka Bootstrap Host is: {{ kafkahostname }}:{{ kafkaport | default(9092) }}"
       when: kafkahostname is defined
 
     - name: Display details for RHDH

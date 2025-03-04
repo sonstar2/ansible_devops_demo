@@ -6,6 +6,9 @@
       ansible.eda.kafka:
         topic: "{{ kafkatopic }}"
         host: "{{ kafkahostname }}"
+        certfile: "{{ kafkacertfile }}"
+        cacert: "{{ kafkacacertfile }}"
+        password: "{{ kafkacertpassword }}"
         port: "{{ kafkaport }}"
         group_id: "{{ kafkagroupid }}"
         # Note that the following lines are insecure and should
