@@ -14,20 +14,15 @@
         verify_mode: CERT_OPTIONAL
   rules:
     - name: Register and patch new VM
-      # condition: event.body.kubernetes.namespace_name == vars.vmnamespace and event.body.structured.msg is search("Found PID for", ignorecase=true)
       condition: >
-        event.body is selectattr('objectRef.namespace', '==', vars.vmnamespace) and 
-        event.body is selectattr('objectRef.resource', '==', 'virtualmachineinestances') and
-        event.body is selectattr('verb', '==', 'create')
-    
-# condition: event.body.objectRef.namespace == vars.vmnamespace and event.body.objectRef.resource == "virtualmachineinstances" and event.body.verb == "create"
-
+        event.body.objectRef.namespace == vars.namespace and
+        event.body.objectRef.resource == 'virtualmachineinestances' and
+        event.body.verb == 'create'
       actions:
         - run_workflow_template:
             name: "add-vm-and-patch"
             organization: "virtualization"
-            extra_vars:
-              hostname: event.body.objectRef.name
+
 
     - name: Fallthrough
       condition: event.meta is defined
