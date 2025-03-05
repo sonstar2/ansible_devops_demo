@@ -15,7 +15,7 @@
   rules:
     - name: Register and patch new VM
       condition: >
-        event.body.objectRef.namespace == vars.namespace and
+        event.body.objectRef.namespace == vars.vmnamespace and
         event.body.objectRef.resource == 'virtualmachineinestances' and
         event.body.verb == 'create'
       actions:
