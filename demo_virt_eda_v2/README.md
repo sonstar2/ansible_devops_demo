@@ -40,3 +40,124 @@ This will:
 6) License AAP with the provided manifest file
 7) Create the demo content within AAP
 8) Debug out the hostnames and admin passwords for later access
+
+
+
+
+
+-----------------
+ClusterLogForwarder
+
+
+apiVersion: observability.openshift.io/v1
+kind: ClusterLogForwarder
+metadata:
+  creationTimestamp: '2025-03-03T21:18:50Z'
+  generation: 1
+  managedFields:
+    - apiVersion: observability.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:filters':
+            .: {}
+            'k:{"name":"monitor-namespace"}':
+              .: {}
+              'f:drop': {}
+              'f:name': {}
+              'f:type': {}
+          'f:inputs':
+            .: {}
+            'k:{"name":"my-audit-logs"}':
+              .: {}
+              'f:audit':
+                .: {}
+                'f:sources': {}
+              'f:name': {}
+              'f:type': {}
+          'f:managementState': {}
+          'f:outputs':
+            .: {}
+            'k:{"name":"logging-kafka"}':
+              .: {}
+              'f:kafka':
+                .: {}
+                'f:topic': {}
+                'f:url': {}
+              'f:name': {}
+              'f:type': {}
+          'f:pipelines':
+            .: {}
+            'k:{"name":"app-logs-pipeline"}':
+              .: {}
+              'f:filterRefs': {}
+              'f:inputRefs': {}
+              'f:name': {}
+              'f:outputRefs': {}
+          'f:serviceAccount':
+            .: {}
+            'f:name': {}
+      manager: kubectl-create
+      operation: Update
+      time: '2025-03-03T21:18:50Z'
+    - apiVersion: observability.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          .: {}
+          'f:conditions': {}
+          'f:filterConditions': {}
+          'f:inputConditions': {}
+          'f:outputConditions': {}
+          'f:pipelineConditions': {}
+      manager: cluster-logging-operator
+      operation: Update
+      subresource: status
+      time: '2025-03-06T04:03:02Z'
+  name: kafka-filtered-app-logging
+  namespace: http-logger
+  resourceVersion: '87565013'
+  uid: 512379ae-5ba9-4450-b7fb-37b2ee3c4a8b
+spec:
+  filters:
+    - drop:
+        - test:
+            - field: .objectRef.namespace
+              notMatches: sleeper
+        - test:
+            - field: .objectRef.resource
+              notMatches: virtualmachineinstances
+            - field: .objectRef.resource
+              notMatches: pods
+        - test:
+            - field: .verb
+              notMatches: create
+            - field: .verb
+              notMatches: delete
+      name: monitor-namespace
+      type: drop
+  inputs:
+    - audit:
+        sources:
+          - kubeAPI
+          - openshiftAPI
+      name: my-audit-logs
+      type: audit
+  managementState: Managed
+  outputs:
+    - kafka:
+        topic: cluster-events
+        url: 'http://logging-cluster-kafka-bootstrap.streams-kafka.svc.cluster.local:9092'
+      name: logging-kafka
+      type: kafka
+  pipelines:
+    - filterRefs:
+        - monitor-namespace
+      inputRefs:
+        - audit
+      name: app-logs-pipeline
+      outputRefs:
+        - logging-kafka
+  serviceAccount:
+    name: http-log-collector-sa
