@@ -1,0 +1,80 @@
+---
+- name: Add a ContainerGroup SA to OpenShift
+  hosts: all
+  gather_facts: false
+  # The following vars should be set on the job
+  # ocp_hostname - The Openshift API hostname
+  # ocp_token - An API Access Token to access the OpenShift API with privileges to create:
+  #                - Namespaces
+  #                - ServiceAccounts
+  #                - Roles
+  #                - RoleBindings
+  #                - Tokens
+  # serviceaccount_name
+  # serviceaccount_namespace
+  #
+  # We'll output the sa_token
+
+
+
+# TODO: Make this a Role
+# TODO: Use a template for the k8s resources
+
+  tasks:
+    - name: Create the k8s resources
+      # from containergroup-sa.yml (but with the namespace too)
+
+    - name: Obtain the token
+      ansible.builtin.uri:
+      register: _token_data
+
+    - name: Set the token value
+      ansible.builtin.set_fact:
+        sa_token: something
+        
+
+
+
+    - name: Get VM details from k8s Interface
+      kubernetes.core.k8s_info:
+        api_version: v1
+        host: "{{ ocp_host }}"
+        api_key: "{{ ocp_token }}"
+        validate_certs: false
+        kind: VirtualMachineInstance
+        name: "{{ vm_hostname }}"
+        namespace: "{{ vm_namespace }}"
+      register: vm_details
+
+    - name: Debug the VM details
+      ansible.builtin.debug:
+        var: vm_details
+
+
+    - name: Create a configuration item
+      servicenow.itsm.configuration_item:
+        instance:
+          host: "{{ snow_instance }}"
+          username: "{{ snow_username }}"
+          password: "{{ snow_password }}"
+        name: "{{ vm_hostname }}"
+        sys_class_name: cmdb_ci_server
+        environment: production
+        category: Virtual Machine
+        install_status: installed
+        ip_address: "{{ vm_details.resources[0].status.interfaces[0].ipAddress }}"
+        mac_address: "{{ vm_details.resources[0].spec.domain.devices.interfaces[0].macAddress }}"
+        operational_status: operational
+        serial_number: "{{ vm_details.resources[0].metadata.uid }}"
+        other:
+          virtual: true
+          ram: "{{ (vm_details.resources[0].spec.domain.memory.guest | replace('Gi', '') | int) * 1024 }}"
+          cpu_name: "{{ vm_details.resources[0].spec.domain.cpu.model }}"
+          cpu_count: "{{ vm_details.resources[0].spec.domain.cpu.sockets }}"
+          cpu_core_count: "{{ vm_details.resources[0].spec.domain.cpu.cores }}"
+          cpu_type: "{{ vm_details.resources[0].spec.architecture }}"
+      register: new_ci
+
+    - name: Debug the new CI details
+      ansible.builtin.debug:
+        var: new_ci
