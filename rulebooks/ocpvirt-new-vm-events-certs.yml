@@ -17,23 +17,25 @@
     - name: Register and patch new VM
       condition: >
         event.body.objectRef.namespace == vars.vmnamespace and
-        event.body.objectRef.resource == 'virtualmachineinestances' and
+        event.body.objectRef.resource == 'virtualmachineinstances' and
         event.body.verb == 'create'
       actions:
+        - debug:
+            msg: "GOT A VM CREATE MSG!"
         - run_workflow_template:
             name: "add-vm-and-patch"
             organization: "virtualization"
 
-    - name: Check pod event
-      condition: >
-        event.body.objectRef.namespace == vars.vmnamespace and
-        event.body.objectRef.resource == 'pods' and
-        event.body.verb == 'create'
-      actions:
-        - debug:
-            msg: "GOT A POD EVENT!"
-        - debug:
-            var: event
+#    - name: Check pod event
+#      condition: >
+#        event.body.objectRef.namespace == vars.vmnamespace and
+#        event.body.objectRef.resource == 'pods' and
+#        event.body.verb == 'create'
+#      actions:
+#        - debug:
+#            msg: "GOT A POD EVENT!"
+#        - debug:
+#            var: event
 
 
     - name: Fallthrough
