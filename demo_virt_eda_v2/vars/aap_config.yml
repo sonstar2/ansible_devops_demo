@@ -25,6 +25,14 @@ controller_credentials:
     inputs:
       username: "fedora"
       password: "fedora"
+  - name: "containergroup-sa-token"
+    description: "OpenShift API Service Account Token"
+    organization: "virtualization"
+    credential_type: "OpenShift or Kubernetes API Bearer Token"
+    inputs:
+      host: "{{ ocp_host }}"
+      verify_ssl: false
+      bearer_token: "{{ ocp_sa_token }}"
 
 controller_projects:
   - name: "ocpvirt-project"
@@ -74,6 +82,30 @@ controller_execution_environments:
     image: "quay.io/rh-ee-dwaters/infra-ee"
     state: present
 
+controller_instance_groups:
+  - name: "ocpvirt-cluster-exec"
+    credential: "containergroup-sa-token"
+    is_container_group: true
+    pod_spec_override:
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        namespace: aap-exec
+      spec:
+        serviceAccountName: containergroup-service-account
+        automountServiceAccountToken: false
+        containers:
+          name: worker
+          args:
+            - ansible-runner
+            - worker
+            - '--private-data-dir=/runner'
+          resources:
+            requests:
+              cpu: 250m
+              memory: 100Mi
+    state: present
+
 controller_templates:
   - name: "patch-vms"
     playbook: "{{ demo_name }}/playbooks/patch-vms.yml"
@@ -81,6 +113,8 @@ controller_templates:
     organization: "virtualization"
     inventory: "ocpvirt-vms"
     project: "ocpvirt-project"
+    instance_groups:
+      - "ocpvirt-cluster-exec"
     ask_variables_on_launch: true
     credentials:
       - "access-virt-vms-cred"
