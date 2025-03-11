@@ -113,6 +113,7 @@ controller_templates:
     organization: "virtualization"
     inventory: "ocpvirt-vms"
     project: "ocpvirt-project"
+    limit: "namespace_{{ vmnamespace | default('vms-namespace') | replace('-', '_') }}"
     instance_groups:
       - "ocpvirt-cluster-exec"
     ask_variables_on_launch: true
@@ -128,7 +129,7 @@ controller_templates:
     project: "ocpvirt-project"
     execution_environment: "infra-ee"
     ask_variables_on_launch: true
-    limit: "namespace_{{ vmnamespace | default('vms-namespace') | replace('-', '_') }}"
+    # limit: "namespace_{{ vmnamespace | default('vms-namespace') | replace('-', '_') }}"
     extra_vars:
       controller_hostname: "{{ controller_hostname }}"
       controller_username: "{{ controller_username }}"
