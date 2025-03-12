@@ -11,8 +11,8 @@
   tasks:
     - name: Set the VM hostname and namespace vars
       ansible.builtin.set_fact:
-        vm_hostname: "{{ ansible_eda.event.body.kubernetes.labels.vm_kubevirt_io_name }}"
-        vm_namespace: "{{ ansible_eda.event.body.kubernetes.namespace_name }}"
+        vm_hostname: "{{ ansible_eda.event.body.objectRef.name }}"
+        vm_namespace: "{{ ansible_eda.event.body.objectRef.namespace }}"
 
     - name: Where am I connecting?
       ansible.builtin.debug:
