@@ -15,7 +15,7 @@
       actions:
         - debug:
             var: event
-        - run_job_template:
+        - run_workflow_template:
             organization: "midrange"
             name: "Auto Healing SNOW Incident Ticket"
     - name: Debug everything else
