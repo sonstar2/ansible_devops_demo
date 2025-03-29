@@ -19,6 +19,7 @@
       ansible.builtin.fetch:
         src: /var/log/httpd/error_log
         dest: /tmp/
+        flat: yes
       become: true
 
     - name: Gather journal log
@@ -29,7 +30,6 @@
       ansible.builtin.copy:
         content: "{{ journal_log }}"
         dest: /tmp/httpd_journal.log
-        flat: yes
       delegate_to: localhost
 
     - name: Update an incident in ServiceNow
