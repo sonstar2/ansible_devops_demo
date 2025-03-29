@@ -37,9 +37,9 @@
         short_description: Add HTTPD logs
         attachments:
           - path: "/tmp/error_log"
-            name: "httpd_error.log"
+            type: text/plain
           - path: "/tmp/httpd_journal.log"
-            name: "httpd_journal.log"
+            type: text/plain
       register: problem
       delegate_to: localhost
     
