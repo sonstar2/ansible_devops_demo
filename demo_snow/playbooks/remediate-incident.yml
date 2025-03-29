@@ -8,25 +8,10 @@
       ansible.builtin.debug:
         var: ansible_eda
   
-    - name: Set the incident number
+    - name: Set the incident number and sys id
       ansible.builtin.set_fact:
         inc_number: "{{ ansible_eda.event.number }}"
-  
-    # - name: Set the sys_id
-    #   ansible.builtin.set_fact:
-    #     inc_sys_id: "{{ ansible_eda.event.sys_id }}"
-
-    # - name: Gather messages log
-    #   ansible.builtin.shell: "echo '{{ dummy_messages_log }}' > /tmp/{{ inc_number }}_messages.log"
-    #   register: messages_log
-    # - name: Gather journal /var/log/messages
-    #   ansible.builtin.shell: "echo '{{ dummy_journal_log }}' > /tmp/{{ inc_number }}_journal.log"
-    #   register: journal_log
-
-    # - name: Getting Incident Detail
-    #   servicenow.itsm.incident_info:
-    #     number: "{{ ansible_eda.event.number }}"
-    #   register: incident_data
+        inc_sys_id: "{{ ansible_eda.event.sys_id }}"
 
     - name: Getting CI Detail
       servicenow.itsm.configuration_item_info:
@@ -44,11 +29,47 @@
         state: started
         enabled: true
       when: ci_detail.records[0].name == inventory_hostname
+      become: true
 
     - name: Validate Web Server works
       ansible.builtin.uri:
         url: http://localhost
       when: ci_detail.records[0].name == inventory_hostname
+
+    - name: Gather HTTPD error log
+      ansible.builtin.synchronize:
+        mode: pull
+        src: /var/log/httpd/error_log
+        dest: /tmp/httpd_error.log
+
+    - name: Gather journal log
+      ansible.builtin.shell: "journalctl -u httpd.service"
+      register: journal_log
+
+    - name: Create journal file
+      ansible.builtin.file:
+        content: "{{ journal_log }}"
+        dest: /tmp/httpd_journal.log
+      delegate_to: localhost
+
+    - name: Attach the log files
+      servicenow.itsm.attachment_upload:
+        table_name: incident
+        table_sys_id: "{{ inc_sys_id }}"
+        attachments:
+          - path: "/tmp/httpd_error.log"
+            name: "error_messages.log"
+          - path: "/tmp/httpd_journal.log"
+            name: "httpd_journal.log"
+
+    - name: Update Incident with augmentation
+      servicenow.itsm.api:
+        resource: incident
+        action: patch
+        sys_id: "{{ inc_sys_id }}"
+        data:
+          work_notes: "Event Driven Ansible has augmented this incident with log files. AAP Job Id: {{ tower_job_id }}"
+      register: snow_var
 
     - name: Close an incident in ServiceNow
       servicenow.itsm.incident:
