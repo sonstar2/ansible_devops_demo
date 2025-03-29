@@ -54,7 +54,7 @@
       servicenow.itsm.incident:
         state: closed
         number: "{{ inc_number }}"
-        close_code: Solved (Permanently)
+        close_code: "Solved (Permanently)"
         close_notes: "HTTPD Service is remediated by EDA"
       delegate_to: localhost
  
