@@ -10,7 +10,7 @@
         table: incident
         interval: 1
   rules:
-    - name: Augment Incident
+    - name: Remediate Incident
       condition: event.cmdb_ci is defined and event.short_description == "httpd is down"
       actions:
         - debug:
