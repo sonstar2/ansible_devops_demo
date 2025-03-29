@@ -18,7 +18,7 @@
     - name: Gather HTTPD error log
       ansible.builtin.fetch:
         src: /var/log/httpd/error_log
-        dest: /tmp/httpd_error.log
+        dest: /tmp/
       become: true
 
     - name: Gather journal log
@@ -29,13 +29,14 @@
       ansible.builtin.copy:
         content: "{{ journal_log }}"
         dest: /tmp/httpd_journal.log
+        flat: yes
       delegate_to: localhost
 
     - name: Update an incident in ServiceNow
       servicenow.itsm.problem:
         short_description: Add HTTPD logs
         attachments:
-          - path: "/tmp/httpd_error.log"
+          - path: "/tmp/error_log"
             name: "httpd_error.log"
           - path: "/tmp/httpd_journal.log"
             name: "httpd_journal.log"
