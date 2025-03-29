@@ -11,13 +11,13 @@
         interval: 1
   rules:
     - name: Augment Incident
-      condition: event.cmdb_ci is defined
+      condition: event.cmdb_ci is defined and event.short_description == "httpd is down"
       actions:
         - debug:
             var: event
         - run_job_template:
             organization: "midrange"
-            name: "augment-incident"
+            name: "remediate-incident"
     - name: Debug everything else
       condition: event.cmdb_ci is not defined
       action:
