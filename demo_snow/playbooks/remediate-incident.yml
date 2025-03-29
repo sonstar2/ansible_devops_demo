@@ -1,6 +1,7 @@
 ---
-- name: Remediate a ServiceNow Incident
-  hosts: localhost
+- name: Remediate Web Server from ServiceNow Incident
+  hosts: all
+  gather_facts: false
 
   tasks:
     - name: Debug all vars
@@ -32,10 +33,17 @@
         sys_id: "{{ ansible_eda.event.cmdb_ci.value }}"
       register: ci_detail
 
-    - name: Debug
+    - name: Debug CI Name
       ansible.builtin.debug:
-        msg: "{{ ci_detail }}"
-        
+        msg: "CI Name: {{ ci_detail.records[0].name }}"
+              
+    - name: Start HTTPD Service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+      when: ci_detail.records[0].name == inventory_hostname
+
     # - name: Attach the log files
     #   servicenow.itsm.attachment_upload:
     #     instance:
