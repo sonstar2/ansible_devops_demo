@@ -32,6 +32,7 @@
       servicenow.itsm.configuration_item_info:
         sys_id: "{{ ansible_eda.event.cmdb_ci.value }}"
       register: ci_detail
+      delegate_to: localhost
 
     - name: Debug CI Name
       ansible.builtin.debug:
