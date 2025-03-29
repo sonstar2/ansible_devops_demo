@@ -37,7 +37,7 @@
       when: ci_detail.records[0].name == inventory_hostname
 
     - name: Gather HTTPD error log
-      ansible.builtin.synchronize:
+      ansible.posix.synchronize:
         mode: pull
         src: /var/log/httpd/error_log
         dest: /tmp/httpd_error.log
