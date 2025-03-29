@@ -8,13 +8,13 @@
       ansible.builtin.debug:
         var: ansible_eda
   
-    - name: Set the incident number
-      ansible.builtin.set_fact:
-        inc_number: "{{ ansible_eda.event.number }}"
+    # - name: Set the incident number
+    #   ansible.builtin.set_fact:
+    #     inc_number: "{{ ansible_eda.event.number }}"
   
-    - name: Set the sys_id
-      ansible.builtin.set_fact:
-        inc_sys_id: "{{ ansible_eda.event.sys_id }}"
+    # - name: Set the sys_id
+    #   ansible.builtin.set_fact:
+    #     inc_sys_id: "{{ ansible_eda.event.sys_id }}"
 
     # - name: Gather messages log
     #   ansible.builtin.shell: "echo '{{ dummy_messages_log }}' > /tmp/{{ inc_number }}_messages.log"
@@ -36,7 +36,7 @@
     - name: Debug CI Name
       ansible.builtin.debug:
         msg: "CI Name: {{ ci_detail.records[0].name }}"
-              
+  
     - name: Start HTTPD Service
       ansible.builtin.service:
         name: httpd
@@ -44,33 +44,19 @@
         enabled: true
       when: ci_detail.records[0].name == inventory_hostname
 
-    # - name: Attach the log files
-    #   servicenow.itsm.attachment_upload:
-    #     instance:
-    #       host: "{{ snow_instance }}"
-    #       username: "{{ snow_username }}"
-    #       password: "{{ snow_password }}"
-    #     table_name: incident
-    #     table_sys_id: "{{ inc_sys_id }}"
-    #     attachments:
-    #       - path: "/tmp/{{ inc_number }}_messages.log"
-    #         name: "{{ inc_number }}_messages.log"
-    #       - path: "/tmp/{{ inc_number }}_journal.log"
-    #         name: "{{ inc_number }}_journal.log"
+    - name: Validate Web Server works
+      ansible.builtin.uri:
+        url: http://localhost
+      when: ci_detail.records[0].name == inventory_hostname
 
-    # - name: Update Incident with augmentation
-    #   servicenow.itsm.api:
-    #     instance:
-    #       host: "{{ snow_instance }}"
-    #       username: "{{ snow_username }}"
-    #       password: "{{ snow_password }}"
-    #     resource: incident
-    #     action: patch
-    #     sys_id: "{{ inc_sys_id }}"
-    #     data:
-    #       work_notes: "Event Driven Ansible has augmented this incident with log files. AAP Job Id: {{ tower_job_id }}"
-    #   register: snow_var
-
+    - name: Close an incident in ServiceNow
+      servicenow.itsm.incident:
+        state: closed
+        number: "{{ ticket_number }}"
+        close_code: Solved (Permanently)
+        close_notes: "{{ comment }}"
+       delegate_to: localhost
+ 
     - name: All done message
       ansible.builtin.debug:
         msg: "Incident augmentation for incident {{ inc_number }} complete."
