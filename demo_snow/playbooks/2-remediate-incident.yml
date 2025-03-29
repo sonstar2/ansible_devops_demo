@@ -41,7 +41,7 @@
 
     - name: Update an incident in ServiceNow
       servicenow.itsm.incident:
-        state: in_progress
+        # state: in_progress
         number: "{{ inc_number }}"
         attachments:
           - path: "/tmp/{{ inc_number }}_messages.log"
