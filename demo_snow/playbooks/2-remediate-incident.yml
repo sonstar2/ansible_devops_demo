@@ -41,6 +41,7 @@
             name: "error_messages.log"
           - path: "/tmp/httpd_journal.log"
             name: "httpd_journal.log"
+      delegate_to: localhost
 
     - name: Update Incident with augmentation
       servicenow.itsm.api:
@@ -50,3 +51,5 @@
         data:
           work_notes: "Event Driven Ansible has augmented this incident with log files. AAP Job Id: {{ tower_job_id }}"
       register: snow_var
+      delegate_to: localhost
+
