@@ -40,7 +40,7 @@
       register: journal_log
 
     - name: Update an incident in ServiceNow
-      servicenow.itsm.incident:
+      servicenow.itsm.problem:
         # state: in_progress
         number: "{{ inc_number }}"
         attachments:
