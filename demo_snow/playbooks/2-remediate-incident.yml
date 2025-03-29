@@ -19,6 +19,7 @@
       ansible.builtin.copy:
         src: /var/log/httpd/error_log
         dest: /tmp/httpd_error.log
+        remote_src: true
       become: true
 
     - name: Gather journal log
