@@ -1,0 +1,19 @@
+---
+- name: Close ServiceNow Incident
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Close an incident in ServiceNow
+      servicenow.itsm.incident:
+        state: closed
+        number: "{{ inc_number }}"
+        close_code: "Resolved by change"
+        close_notes: "HTTPD Service is remediated by EDA"
+      delegate_to: localhost
+ 
+    - name: All done message
+      ansible.builtin.debug:
+        msg: "Incident augmentation for incident {{ inc_number }} complete."
+
+    

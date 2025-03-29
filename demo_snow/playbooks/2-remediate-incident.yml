@@ -1,40 +1,19 @@
 ---
 - name: Remediate Web Server from ServiceNow Incident
-  hosts: all
+  hosts: "{{ _hosts | default(omit) }}"
   gather_facts: false
 
-  tasks:
-    - name: Debug all vars
-      ansible.builtin.debug:
-        var: ansible_eda
-  
-    - name: Set the incident number and sys id
-      ansible.builtin.set_fact:
-        inc_number: "{{ ansible_eda.event.number }}"
-        inc_sys_id: "{{ ansible_eda.event.sys_id }}"
-
-    - name: Getting CI Detail
-      servicenow.itsm.configuration_item_info:
-        sys_id: "{{ ansible_eda.event.cmdb_ci.value }}"
-      register: ci_detail
-      delegate_to: localhost
-
-    - name: Debug CI Name
-      ansible.builtin.debug:
-        msg: "CI Name: {{ ci_detail.records[0].name }}"
-  
+  tasks: 
     - name: Start HTTPD Service
       ansible.builtin.service:
         name: httpd
         state: started
         enabled: true
-      when: ci_detail.records[0].name == inventory_hostname
       become: true
 
     - name: Validate Web Server works
       ansible.builtin.uri:
         url: http://localhost
-      when: ci_detail.records[0].name == inventory_hostname
 
     - name: Gather HTTPD error log
       ansible.builtin.copy:
@@ -70,17 +49,3 @@
         data:
           work_notes: "Event Driven Ansible has augmented this incident with log files. AAP Job Id: {{ tower_job_id }}"
       register: snow_var
-
-    - name: Close an incident in ServiceNow
-      servicenow.itsm.incident:
-        state: closed
-        number: "{{ inc_number }}"
-        close_code: "Resolved by change"
-        close_notes: "HTTPD Service is remediated by EDA"
-      delegate_to: localhost
- 
-    - name: All done message
-      ansible.builtin.debug:
-        msg: "Incident augmentation for incident {{ inc_number }} complete."
-
-    
