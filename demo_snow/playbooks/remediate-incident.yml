@@ -55,7 +55,7 @@
         number: "{{ inc_number }}"
         close_code: Solved (Permanently)
         close_notes: "HTTPD Service is remediated by EDA"
-       delegate_to: localhost
+      delegate_to: localhost
  
     - name: All done message
       ansible.builtin.debug:
