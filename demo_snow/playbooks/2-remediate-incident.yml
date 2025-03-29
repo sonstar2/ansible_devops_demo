@@ -37,10 +37,10 @@
         table_name: incident
         table_sys_id: "{{ inc_sys_id }}"
         attachments:
-          # - path: "/tmp/httpd_error.log"
-          #   name: "error_messages.log"
-          - path: "/tmp/httpd_journal.log"
-            name: "httpd_journal.log"
+          - path: "/tmp/httpd_error.log"
+            name: "error_messages.log"
+          # - path: "/tmp/httpd_journal.log"
+          #   name: "httpd_journal.log"
       delegate_to: localhost
 
     - name: Update Incident with augmentation
