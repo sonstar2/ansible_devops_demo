@@ -27,7 +27,7 @@
       register: journal_log
 
     - name: Create journal file
-      ansible.builtin.file:
+      ansible.builtin.copy:
         content: "{{ journal_log }}"
         dest: /tmp/httpd_journal.log
       delegate_to: localhost
