@@ -29,7 +29,7 @@
 
     - name: Getting CI Detail
       servicenow.itsm.configuration_item_info:
-        sys_info: "{{ ansible_eda.event.cmdb_ci.value }}"
+        sys_id: "{{ ansible_eda.event.cmdb_ci.value }}"
       register: ci_detail
 
     - name: Debug
