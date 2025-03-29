@@ -8,9 +8,9 @@
       ansible.builtin.debug:
         var: ansible_eda
   
-    # - name: Set the incident number
-    #   ansible.builtin.set_fact:
-    #     inc_number: "{{ ansible_eda.event.number }}"
+    - name: Set the incident number
+      ansible.builtin.set_fact:
+        inc_number: "{{ ansible_eda.event.number }}"
   
     # - name: Set the sys_id
     #   ansible.builtin.set_fact:
@@ -52,9 +52,9 @@
     - name: Close an incident in ServiceNow
       servicenow.itsm.incident:
         state: closed
-        number: "{{ ticket_number }}"
+        number: "{{ inc_number }}"
         close_code: Solved (Permanently)
-        close_notes: "{{ comment }}"
+        close_notes: "HTTPD Service is remediated by EDA"
        delegate_to: localhost
  
     - name: All done message
