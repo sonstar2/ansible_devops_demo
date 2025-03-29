@@ -1,6 +1,6 @@
 ---
 - name: Remediate Web Server from ServiceNow Incident
-  hosts: "{{ _hosts | default(omit) }}"
+  hosts: "{{ target_host_name | default(omit) }}"
   gather_facts: false
 
   tasks: 
