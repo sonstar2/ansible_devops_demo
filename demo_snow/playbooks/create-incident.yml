@@ -14,8 +14,8 @@
         impact: "{{ sn_impact }}"
         other:
           u_operating_system: "{{ os | default(omit) }}"
-          u_ip_address: "{{ ip_addr | default(omit) }}"
-          u_vm_name: "{{ inventory_hostname | default(omit) }}"
+          u_ip_address: "{{ sn_ci_ip_address | default(omit) }}"
+          u_vm_name: "{{ sn_ci_hostname | default(omit) }}"
       register: new_incident
       delegate_to: localhost
 
