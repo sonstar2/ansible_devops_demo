@@ -1,6 +1,7 @@
 ---
 - name: Create ServiceNow Incident
   hosts: localhost
+  connection: local
   gather_facts: false
   tasks:
 
@@ -17,7 +18,6 @@
           u_ip_address: "{{ sn_ci_ip_address | default(omit) }}"
           u_vm_name: "{{ sn_ci_hostname | default(omit) }}"
       register: new_incident
-      delegate_to: localhost
 
     - name: Display incident number
       ansible.builtin.debug:
