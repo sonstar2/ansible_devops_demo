@@ -5,6 +5,13 @@
   gather_facts: false
   tasks:
 
+
+    - name: Get the configuration item info
+      servicenow.itsm.configuration_item_info:
+        name: "{{ sn_ci_hostname }}"
+        table_name: "cmdb_ci_server"
+      register: ci_info
+
     - name: Create an incident in ServiceNow
       servicenow.itsm.incident:
         state: new
