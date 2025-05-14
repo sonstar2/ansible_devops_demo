@@ -1,0 +1,9 @@
+plugin: servicenow.itsm.now
+enhanced: false
+strict: false
+table: cmdb_ci_server
+columns:
+  - name
+  - ip_address
+  - location
+  - location.country
