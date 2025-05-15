@@ -7,5 +7,5 @@ columns:
   - ip_address
   - location
   - location.country
-compose:
-    ansible_host: ip_address
+# compose:
+#   ansible_host: ip_address
