@@ -20,6 +20,7 @@
         src: /var/log/httpd/error_log
         dest: /tmp/
         flat: yes
+        remote_src: yes
       become: true
 
     - name: Gather journal log
