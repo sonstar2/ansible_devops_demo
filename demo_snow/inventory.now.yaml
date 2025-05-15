@@ -8,4 +8,4 @@ columns:
   - location
   - location.country
 compose:
-  ansible_host: ip_address
+    ansible_host: ip_address
