@@ -16,7 +16,7 @@
         - debug:
             var: event
         - run_workflow_template:
-            organization: "WP""
+            organization: "WP"
             name: "Auto Healing SNOW Incident Ticket"
     - name: Debug everything else
       condition: event.cmdb_ci is not defined
