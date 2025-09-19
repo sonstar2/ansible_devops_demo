@@ -8,3 +8,5 @@ collections:
   - name: ansible.eda
   - name: servicenow.itsm
   - name: kubernetes.core
+  - name: fred.eda
+    src: https://github.com/sonstar2/fred.eda
