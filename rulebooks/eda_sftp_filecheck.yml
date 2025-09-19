@@ -16,15 +16,15 @@
         debug:
           msg: "New file detected: {{ event.sftp_file_monitor.file.filename }} ({{ event.sftp_file_monitor.file.size_human }})"
 
-    - name: Process text files
-      condition: >
-        event.sftp_file_monitor.event_type == "file_created" and
-        event.sftp_file_monitor.file.extension == ".txt"
-      action:
-        - run_job_template:
-            organization: "{{ organisation_name }}"
-            name: "{{ workflow_name }}"
-            extra_vars:
-              file_path: "{{ event.sftp_file_monitor.file.path }}"
-              file_name: "{{ event.sftp_file_monitor.file.filename }}"
-              sftp_host: "{{ event.sftp_file_monitor.sftp_server.host }}"
+    # - name: Process text files
+    #   condition: >
+    #     event.sftp_file_monitor.event_type == "file_created" and
+    #     event.sftp_file_monitor.file.extension == ".txt"
+    #   action:
+    #     - run_job_template:
+    #         organization: "{{ organisation_name }}"
+    #         name: "{{ workflow_name }}"
+    #         extra_vars:
+    #           file_path: "{{ event.sftp_file_monitor.file.path }}"
+    #           file_name: "{{ event.sftp_file_monitor.file.filename }}"
+    #           sftp_host: "{{ event.sftp_file_monitor.sftp_server.host }}"
