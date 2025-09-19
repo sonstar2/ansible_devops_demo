@@ -21,9 +21,10 @@
         event.sftp_file_monitor.event_type == "file_created" and
         event.sftp_file_monitor.file.extension == ".txt"
       action:
-        run_playbook:
-          name: process_text_file.yml
-          extra_vars:
-            file_path: "{{ event.sftp_file_monitor.file.path }}"
-            file_name: "{{ event.sftp_file_monitor.file.filename }}"
-            sftp_host: "{{ event.sftp_file_monitor.sftp_server.host }}"
+        - run_job_template:
+            organization: "{{ organisation_name }}"
+            name: "{{ workflow_name }}"
+            extra_vars:
+              file_path: "{{ event.sftp_file_monitor.file.path }}"
+              file_name: "{{ event.sftp_file_monitor.file.filename }}"
+              sftp_host: "{{ event.sftp_file_monitor.sftp_server.host }}"
