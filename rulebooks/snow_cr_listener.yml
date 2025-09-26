@@ -12,13 +12,16 @@
         interval: 1
   rules:
     - name: Apply Policy
-      condition: event.cmdb_ci is defined
+      condition: event.start_date is defined and event.end_date is defined
       actions:
         - debug:
             var: event
         - run_job_template:
             organization: "{{ organisation_name }}"
             name: "{{ job_template_name }}"
+            extra_vars:
+              plan_change_start_time: event.start_date
+              plan_change_end_time: eda.end_date
     - name: Debug everything else
       condition: event.cmdb_ci is not defined
       action:
