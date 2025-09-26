@@ -22,7 +22,7 @@
             job_args:
               extra_vars:
                 plan_change_start_time: "{{ event.start_date }}"
-                plan_change_end_time: "{{ eda.end_date }}"
+                plan_change_end_time: "{{ event.end_date }}"
     - name: Debug everything else
       condition: event.cmdb_ci is not defined
       action:
