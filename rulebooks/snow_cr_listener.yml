@@ -16,13 +16,39 @@
       actions:
         - debug:
             var: event
-        - run_job_template:
+        - run_workflow_template:
             organization: "{{ organisation_name }}"
             name: "{{ job_template_name }}"
             job_args:
               extra_vars:
                 plan_change_start_time: "{{ event.start_date }}"
                 plan_change_end_time: "{{ event.end_date }}"
+    - name: Add BigIP Pool
+      condition: event.short_description == "Add pool"
+      actions:
+        - debug:
+            var: event
+        - run_workflow_template:
+            organization: "{{ organisation_name }}"
+            name: "{{ job_template_name }}"
+            job_args:
+              extra_vars:
+                survey_action: "add"
+                survey_vm_name: "{{ event.cmdb_ci }}"
+
+    - name: Del BigIP Pool
+      condition: event.short_description == "Delete pool"
+      actions:
+        - debug:
+            var: event
+        - run_job_template:
+            organization: "{{ organisation_name }}"
+            name: "{{ job_template_name }}"
+            job_args:
+              extra_vars:
+                survey_action: "delete"
+                survey_vm_name: "{{ event.cmdb_ci }}"
+
     - name: Debug everything else
       condition: event.cmdb_ci is not defined
       action:
