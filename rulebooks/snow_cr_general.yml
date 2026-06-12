@@ -19,6 +19,10 @@
         - run_workflow_template:
             organization: "{{ organisation_name }}"
             name: "{{ workflow_name }}"
+            job_args:
+              extra_vars:
+                aws_region: "{{ aws_region }}"
+                _hosts: "{{ target_group }}"
   
 
     - name: Debug everything else
